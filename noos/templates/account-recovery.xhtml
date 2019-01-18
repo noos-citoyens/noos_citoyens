@@ -7,10 +7,12 @@
     <div class="ui large message">
 
       {% if  step == "email-form" %}
-      <div class="header"> Password recovery</div>
+      <div class="header">Récupération de mot de passe</div>
       <p>
-        Type your email in the field below, <br/>
-        and validate to get a password reset link.
+          Pour recevoir un lien permettant de changer votre mot de passe<br/>
+          Indiquez l'adresse associée à votre compte<br/>
+          et valider le formulaire.
+
       </p>
 
       <form action="{{url_for('auth.password_recovery')}}" method="POST" class="ui form {{ 'error' if invalid_email else '' }}">
@@ -29,7 +31,7 @@
 
       {% if  step == "token-invalid" %}
       <div class="header">Récupération de mot de passe</div>
-      <p>Cette adresse de récupération a expirée<br/>
+      <p>Ce lien a expirée<br/>
 
       </p>
       <p>Demandez un <a href="{{url_for('auth.password_recovery')}}">nouveau lien</a>pour changer votre mot de passe<br/>
@@ -50,27 +52,27 @@
       {% endif %}
 
         {% if  step in("email-sent",)  %}
-      <div class="header"> Password recovery </div>
+      <div class="header">Récupération de mot de passe</div>
       <p>
-        We just sent an email to <strong>{{email}}</strong><br/>
-        Please check your mails and click the reset password link to change your password.
+        Verifiez vos mail et suivez le lien qui se trouve dans l'email que
+        nous venons d'envoyer à l'adresse <strong>{{email}}</strong><br/>
       </p>
         {% endif %}
 
       {% if  step == "password-form" %}
-      <h3>Change your password  </h3>
+      <h3>Changez votre mot de passe</h3>
       <form action="{{url_for('auth.change_password')}}" method="POST" class="ui form {{ 'error' if has_error else '' }}">
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
         <input type="hidden" name="token" value="{{ token }}"/>
         <input type="hidden" name="email" value="{{email}}"/>
         <div class="content">
           <div class="required field">
-            <label>Choose a new password</label>
-            <input name="password" type="password" value="" placeholder="Choose a new password"/>
+            <label>Nouveau mot de passe: 8 caractères min</label>
+            <input name="password" type="password" value="" placeholder="Nouveau mot de passe"/>
           </div>
           <div class="required field">
-            <label>Type the same password again</label>
-            <input name="confirm" type="password" value="" placeholder="Type the same password"/>
+            <label>Confirmation du mot de passe</label>
+            <input name="confirm" type="password" value="" placeholder="Confirmation du mot de passe"/>
           </div>{% if  has_error %}
           <div id="errors" class="ui error message">{% for field, err in errors.items() %}
             <div class="header">{{field}}</div>{% for e in err %}

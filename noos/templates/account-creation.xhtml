@@ -15,17 +15,18 @@
 
           {% if  step == "validate" %}
           <div class="header"> Welcome {{form.username.data}}</div>
-          <p>Your account has been created.</p>
-          <p>To make this account fully functional,<br/>
-             please activate it through the link in the email we have just sent to <strong>{{form.email.data}}</strong>.
+          <p>Vous êtes désormais inscrit sur NOos-Citoyens.</p>
+          <p>Pour activer activez votre inscription  <br/>
+             suivez le lien contenu dans l'email que nous venons d'envoyer à <strong>{{form.email.data}}</strong>.
           </p>
           {% endif %}
 
           {% if  step == "validation-resent" %}
           <div class="header"> Welcome {{username}}</div>
-          <p>We just resent you an email</p>
-          <p>To make this account fully functional,<br/>
-             please activate the link in the email we just sent to <strong>{{email}}</strong></p>
+          <p>On vient de vous écrire !</p>
+           <p>Pour activer activez votre inscription  <br/>
+             suivez le lien contenu dans l'email que nous venons d'envoyer à <strong>{{form.email.data}}</strong>.
+          </p>
           {% endif %}
 
           {% if  step == "invitation-invalid" %}
@@ -35,9 +36,9 @@
           {% endif %}
 
           {% if  step == "token-invalid" %}
-          <div class="header">Your account can not be created.</div>
-          <p>The activation token is no longer valid.<br/> </p>
-          <p>You can <a href="/">request a new invitation  </a><br/></p>
+          <div class="header">Votre copmpte ne peut être valider</div>
+          <p>Le lien n'est plus valide<br/>
+             <a  class="ui primary button" href="{{url_for('auth.resend_validation', uuid=uuid)}}">Demander un nouveau lien d'activation.</a></p>
           {% endif %}
 
           {% if  step == "cant-send-email" %}
@@ -57,7 +58,7 @@
             <p>
                <strong>{{email}}</strong> <br/>
             </p>
-            {% if  activ %}<p> You can <a href="/">login  with your username and password </a><br/></p>{% endif %}
+            {% if  activ %}<p> You can <a href="/">login with your username and password </a><br/></p>{% endif %}
             {% if  activ == False  %}
               <p>Vérifiez vos email, un lien d'activation vous a été envoyé lors de votre inscription<br/></p>
                 <p>
@@ -67,9 +68,8 @@
           {% endif %}
 
           {% if  step == "active" %}
-          <div class="header"> Voilà </div>
-          <p>Votre comptre est activé..</p>
-          <p>Vous pouvez maintenant <a href="{{url_for('new_prop') }}">déposer</a> vos propositions<br/></p>
+          <div class="header"> Votre compte est activé.. </div>
+          <p>Vous pouvez maintenant déposer vos <a href="{{url_for('new_prop') }}">propositions</a> <br/></p>
           {% endif %}
 
           {% if  step == "create" %}

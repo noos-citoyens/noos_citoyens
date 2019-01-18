@@ -36,8 +36,7 @@ ACTIVATION_EMAIL = """
         %s
         Si vous n'avez pas demandé à vous inscrire sur NOos-Citoyens, vous n’avez rien à faire.
         S'il vous plaît ne répondez pas à ce courriel qui est généré automatiquement.
-        
-        %s
+       
     """
 
 RECOVERY_EMAIL_SUBJECT = "NOos-Citoyens // Réinitialisez votre vos de passe"
@@ -108,6 +107,7 @@ def handleEmailExistsValidationError(err):
                                 step="email-in-use",
                                 token=token,
                                 email=email,
+                                uuid = user.uuid,
                                 username = err.user.username,
                                 activ = err.user.is_active() )
 
