@@ -130,7 +130,11 @@ def create_app(test_config=None):
         q = params.get('query', None)
         limit = max(50, params.get('limit', 10))
         if q:
-            data = [p.to_dict() for p in datastorage.Proposition.simple_search(q,limit)]
+            props = datastorage.Proposition.simple_search(q, limit)
+            data = []
+            for p in props:
+                data.append(p.to_dict())
+                data[-1]['id'] = p.meta.id
             return jsonify(data)
         else:
             return jsonify([])
@@ -162,8 +166,10 @@ def create_app(test_config=None):
             except:
                 return render_template('newprop.xhtml', title="faire une proposition")
 
+
     @app.route('/proposition/<string:id>')
-    def get_proposition(id):
+    @app.route('/proposition')
+    def get_proposition(id=None):
         p = datastorage.Proposition.get(id, ignore=404)
         if p is not None:
             data = p.to_dict()

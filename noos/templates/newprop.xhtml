@@ -35,7 +35,7 @@
 {% block script %}
 <script type="module">
 import NewPropositionPage from "{{ url_for('static', filename="newprop.js") }}"
-let app = new NewPropositionPage("cause", "content", "compare_btn")
+let app = new NewPropositionPage("cause", "content", "compare_btn", "{{ url_for('get_proposition') }}")
 </script>
 
 
