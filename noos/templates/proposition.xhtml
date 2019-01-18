@@ -26,10 +26,10 @@
 </div>
 </div>
 
-<div class="ui divider"/>
-<div class="ui divider"/>
+<div class="ui hidden divider"></div>
+<div class="ui hidden divider"></div>
 
-<p>Vous pouvez partagez cette proposition avec ce lien <a href="{{ url_for('get_proposition', id=prop.id) }}">{{ url_for('get_proposition', id=prop.id) }}</a> </p>
+<p>Vous pouvez partagez cette proposition avec ce lien<br/> <a href="{{ url_for('get_proposition', id=prop.id) }}">{{ url_for('get_proposition', id=prop.id, _external=True) }}</a> </p>
 
 
 {% endblock %}
