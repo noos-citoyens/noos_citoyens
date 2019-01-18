@@ -10,8 +10,6 @@
 {% endblock %}
 
 {% block mainzone %}
-
-<h3>Vous pouvez partagez cette proposition en copiant <a href="{{ url_for('get_proposition', id=prop.id) }}">ce lien</a> </h3>
 <div class="ui one cards">
 <div class="ui large card">
     <div class="content">
@@ -27,6 +25,12 @@
     </div>
 </div>
 </div>
+
+<div class="ui divider"/>
+<div class="ui divider"/>
+
+<p>Vous pouvez partagez cette proposition avec ce lien <a href="{{ url_for('get_proposition', id=prop.id) }}">{{ url_for('get_proposition', id=prop.id) }}</a> </p>
+
 
 {% endblock %}
 
