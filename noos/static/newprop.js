@@ -6,7 +6,6 @@ export default class NewPropositionPage {
         this.resultsEL = document.getElementById("results")
         this.submitEL = document.getElementById("submit_btn")
         this.propURL = propURL;
-        alert(this.propURL)
 
         this.compareEL.onclick = ev => this.query_sims(ev, this)
         this.submitEL.onclick = ev => this.submit(ev, this)
