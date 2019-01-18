@@ -1,0 +1,34 @@
+{% extends "index.xhtml" %}
+
+{% block headers %}
+<meta property="og:title" content="Proposition sur NOos-citoyens"/>
+<meta property="og:type" content="website"/>
+<meta property="og:image" content="http://noos-citoyens.fr/static/img/biglogo.jpeg"/>
+<meta property="og:url" content="http://noos-citoyens.fr/proposition{{ prop.id }}"/>
+<meta property="og:description" content="{{ prop.username }} propose de {{ prop.content }}"/>
+<meta property="og:locale" content="fr_FR"/>
+{% endblock %}
+
+{% block mainzone %}
+<div class="ui one cards">
+<div class="ui large card">
+    <div class="content">
+        <p>à cause de <strong>{{ prop.cause}}</strong></p>
+      <div class="header">{{ prop.username }}</div>
+        <div class="meta">propose de</div>
+      <div class="description">
+         <strong>{{ prop.content }}</strong>
+      </div>
+   </div>
+    <div class="extra content">
+        <p>Il vous sera bientôt possible d'ajouter des mots clefs et de prendre position pour ou contre cette proposition</p>
+    </div>
+</div>
+</div>
+
+{% endblock %}
+
+
+{% block script %}
+
+{% endblock %}

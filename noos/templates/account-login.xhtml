@@ -1,0 +1,51 @@
+{% extends "index.xhtml" %}
+
+{% block mainzone %}
+
+  <div class="row">
+    <div class="column">
+      <div class="ui form warning">
+        <div class="ui large message">
+
+          {% if  step == "login" %}
+          <div style="max-width:320px" class="column">
+            <h3 class="ui header">Log in to get started</h3>
+            <form action="{{url_for('auth.login')}}" method="POST" class="ui large form {{ 'error' if fail else '' }}">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+              <div class="ui stacked segment">
+                <div class="field">
+                  <div class="ui left icon input"><i class="mail outline icon"></i>
+                    <input type="email" placeholder="email" name="email">
+                  </div>
+                </div>
+                <div class="field">
+                  <div class="ui left icon input"><i class="lock icon"></i>
+                    <input type="password" placeholder="password" name="password">
+                  </div>
+                </div>
+                <div style="margin-bottom:0px" class="field">
+                  <input type="submit" value="Login" class="ui fluid large submit primary button">{% if fail %}
+                  <div class="ui small error message">
+                    <p>Login or password incorrect.</p>
+                  </div>{% endif %}
+                </div>
+                <div class="field"><a href="{{url_for('auth.password_recovery')}}" style="font-size:smaller;">Mot de passe perdu ?</a></div>
+              </div>
+            </form>
+          </div>
+          {% endif %}
+
+          <div class="ui divider"></div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+{% endblock %}
+
+
+{% block script %}
+{% endblock %}

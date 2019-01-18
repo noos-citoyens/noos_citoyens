@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html
+        PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+    <title>{% block title %}{{ title }}{% endblock %}</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='semui/semantic.min.css') }}"/>
+    <script type="application/javascript" src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="  crossorigin="anonymous"></script>
+    <script type="application/javascript" src="{{ url_for('static', filename='semui/semantic.min.js') }}"></script>
+    <script type="application/javascript" src="https://d3js.org/d3.v5.min.js"></script>
+    {% block headers %}{% endblock %}
+</head>
+<body>
+
+{% block menu %}
+<div class="ui stackable menu">
+    <div class="ui container">
+        <a href="#" class="header item">
+            Noos-Citoyens
+        </a>
+        <a href="#" class="item">Accueil</a>
+        <div class="ui simple dropdown item">
+            <b>Participer</b><i class="dropdown icon"></i>
+            <div class="menu">
+                {%if current_user.is_authenticated %}
+                <a href="{{ url_for('new_prop') }}" class="item">Proposer</a>
+                <a href="#" class="disabled item">Voter</a>
+                <a href="#" class="disabled item">Explorer</a>
+                {% else %}
+                <a href="#" class="disabled item">Proposer</a>
+                <a href="#" class="disabled item">Voter</a>
+                <a href="#" class="disabled item">Explorer</a>
+                {%endif%}
+            </div>
+        </div>
+
+        <a href="#" class="item">Qu'est-ce que c'est ?</a>
+        <a href="#" class="item">Presse/Actu</a>
+        <a href="#" class="item">Contact</a>
+
+         <div class="ui simple dropdown item">
+            <b>{% if not current_user.is_authenticated%}compte{%endif%} {{current_user.username}} </b><i class="dropdown icon"></i>
+            <div class="menu">
+                {% if not current_user.is_authenticated%}
+                <a href="{{ url_for('auth.login_form') }}" class="item">Se connecter</a>
+                <a href="{{ url_for('auth.create_account') }}" class="item">Créer un compte</a>
+                <a href="{{ url_for('auth.password_recovery') }}" class="item">Mot de passe perdu</a>
+                {%endif%}
+                {% if current_user.is_authenticated%}<a href="{{ url_for('auth.logout') }}" class="item">Déconnecter</a>{%endif%}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+<div class="ui main text container" style="margin-top: 7em;">
+    {% block mainzone %}
+    <h1 class="ui centered header">Noos-Citoyens</h1>
+    <div class="ui vertical aligned stackable grid container">
+        <div class="row">
+            <div class="eight wide floated column">
+                <img alt="visuel" class="ui large bordered rounded image" src="{{ url_for('static', filename='img/biglogo.jpeg') }}"></img>
+            </div>
+            <div class="six wide column">
+                <h2>La NOuvelle organisation Sociale</h2>
+                <h3>Collecte nationale des revendications et des idées citoyennes
+        Tous les citoyens acteurs de la démocratie</h3>
+                <p>NOos-Citoyen est un outil numérique d'intelligence collective proposé aux citoyens pour s'exprimer et se structurer en toute liberté sans intermédiaire dans la transparence et l'égalité et nous l'espérons dans la fraternité.</p>
+            </div>
+        </div>
+    </div>
+    {% endblock %}
+</div>
+
+
+
+
+{% block footer %}
+<div class="ui hidden divider"></div>
+<div class="ui inverted vertical footer segment">
+    <div class="ui container">
+      <div class="ui stackable inverted divided equal height stackable grid">
+        <div class="three wide column">
+          <h4 class="ui inverted header">À propos</h4>
+          <div class="ui inverted link list">
+            <a href="#" class="item">Contact</a>
+            <a href="#" class="item">Conditions d'utilisation</a>
+              <a href="#" class="item">Qui sommes nous ?</a>
+          </div>
+        </div>
+        <div class="three wide column">
+          <h4 class="ui inverted header">Comment ça marche ?</h4>
+          <div class="ui inverted link list">
+            <a href="#" class="item">Documentation</a>
+            <a href="#" class="item">Science</a>
+            <a href="#" class="item">Technique</a>
+            <a href="#" class="item">Code Source</a>
+          </div>
+        </div>
+        <div class="seven wide column">
+          <h4 class="ui inverted header">L'association</h4>
+          <p>Extra space for a call to action inside the footer that could help re-engage users.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+
+{% block script %}
+<script type="module">
+    import Main from "{{ url_for('static', filename="main.js") }}"
+    const data = {{ data|tojson }}
+    let app = new Main()
+</script>
+{% endblock %}
+
+
+
+
+</body>
+</html>

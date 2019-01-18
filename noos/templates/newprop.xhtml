@@ -1,0 +1,43 @@
+{% extends "index.xhtml" %}
+
+{% block mainzone %}
+<h1 class="ui centered header">Faire une proposition</h1>
+<div class="ui segment">
+<p>{{ msg }}</p>
+<p>Faites vos propositions...</p>
+<p>guidelines, quelques conseils</p>
+</div>
+<form id="form" action="{{url_for('new_prop')}}" method="post">
+<div class="ui segment">
+    <div class="ui form">
+        <div class="inline fields">
+            <label>En colère contre</label>
+            <div class="field"><input id="cause" name="cause" type="text" placeholder="un thème"/></div>
+        </div>
+        <div class="inline fields">
+            <label>Je propose de...</label>
+            <div class="field"><input id="content" name="content" type="text" placeholder="changer quelquechose" size="60"/></div>
+        </div>
+        <div id="compare_btn" class="ui submit button">Comparer</div>
+    </div>
+</div>
+
+<div id="results"  class="ui segment" style="visibility: hidden">
+<p>Voici quelques propositions déjà soumises. Vous pourrez revenir la soutenir ou ajouter des mots-clefs dans les prochaines étapes</p>
+<p>Si après avoir lu ces propositions vous estimez que la votre est originale, Validez là !</p>
+<div id="props_similaires" class="ui divided huge list segment"></div>
+<div id="submit_btn" class="ui submit button">Valider la nouvelle proposition</div>
+</div>
+</form>
+{% endblock %}
+
+
+{% block script %}
+<script type="module">
+import NewPropositionPage from "{{ url_for('static', filename="newprop.js") }}"
+let app = new NewPropositionPage("cause", "content", "compare_btn")
+</script>
+
+
+</script>
+{% endblock %}

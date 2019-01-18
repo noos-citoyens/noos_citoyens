@@ -1,0 +1,23 @@
+{% extends "index.xhtml" %}
+
+{% block mainzone %}
+
+<h1 class="ui centered header">Requête simple dans les données</h1>
+<div class="ui icon input">
+  <input id="gj-query" type="text" placeholder="Search..."/>
+  <i id="gj-search-button" class="inverted circular search link icon"></i>
+</div>
+<div id="gj-results" class="ui divided list"></div>
+
+{% endblock %}
+
+
+{% block script %}
+<script type="module">
+import SimpleQ from "{{ url_for('static', filename="simplequery.js") }}"
+let app = new SimpleQ("gj-query", "gj-search-button", "gj-results")
+</script>
+
+
+</script>
+{% endblock %}

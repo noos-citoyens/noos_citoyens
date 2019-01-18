@@ -1,0 +1,141 @@
+{% extends "index.xhtml" %}
+
+{% block mainzone %}
+
+  <div class="row">
+    <div class="column">
+      <div class="ui form warning">
+        <div class="ui large message">
+
+          {% if  step == "invitation-send" %}
+          <div class="header"> Thank you</div>
+          <p>for your interest in padagraph.io.</p>
+          <p>We will send you an invitation as soon as the service opens.</p>
+          {% endif %}
+
+          {% if  step == "validate" %}
+          <div class="header"> Welcome {{form.username.data}}</div>
+          <p>Your account has been created.</p>
+          <p>To make this account fully functional,<br/>
+             please activate it through the link in the email we have just sent to <strong>{{form.email.data}}</strong>.
+          </p>
+          {% endif %}
+
+          {% if  step == "validation-resent" %}
+          <div class="header"> Welcome {{username}}</div>
+          <p>We just resent you an email</p>
+          <p>To make this account fully functional,<br/>
+             please activate the link in the email we just sent to <strong>{{email}}</strong></p>
+          {% endif %}
+
+          {% if  step == "invitation-invalid" %}
+          <div class="header">Your account can not be created.</div>
+          <p>The invitation token is no longer valid.<br/> </p>
+          <p>You can <a href="/">request a new invitation  </a><br/></p>
+          {% endif %}
+
+          {% if  step == "token-invalid" %}
+          <div class="header">Your account can not be created.</div>
+          <p>The activation token is no longer valid.<br/> </p>
+          <p>You can <a href="/">request a new invitation  </a><br/></p>
+          {% endif %}
+
+          {% if  step == "cant-send-email" %}
+          <div class="header">Your account can not be created.</div>
+          <p>There was a problem sending you an email to <strong>{{email}}</strong></p>
+          <p>  Please check your email address</p>
+          {% endif %}
+
+          {% if  step == "user-account-limit" %}
+          <div class="header">Your account can not be created.</div>
+          <p>User account limit is reached.</p>
+          {% endif %}
+
+          {% if  step == "email-in-use" %}
+            <div class="header">{{message}}</div>
+
+            <p>
+               <strong>{{email}}</strong> <br/>
+            </p>
+            {% if  activ %}<p> You can <a href="/">login  with your username and password </a><br/></p>{% endif %}
+            {% if  activ == False  %}
+              <p>Vérifiez vos email, un lien d'activation vous a été envoyé lors de votre inscription<br/></p>
+                <p>
+                 <a  class="ui primary button" href="{{url_for('auth.resend_validation', uuid=uuid)}}">Demander un nouveau lien d'activation.</a>
+              </p>
+            {% endif %}
+          {% endif %}
+
+          {% if  step == "active" %}
+          <div class="header"> Voilà </div>
+          <p>Votre comptre est activé..</p>
+          <p>Vous pouvez maintenant <a href="{{url_for('new_prop') }}">déposer</a> vos propositions<br/></p>
+          {% endif %}
+
+          {% if  step == "create" %}
+          <h3>{{text}}  </h3>
+          <form action="create-account" method="POST" class="ui form {{ 'error' if has_error else '' }}">
+            <input type="hidden" name="csrf_token" value="{{csrf_token()}}"/>
+            <input type="hidden" name="invitation" value="{{ form.invitation.data }}"/>
+            <div class="content">
+
+              <div class="required field">
+                <label>Un pseudo qui sera utilisé sur le site</label>
+                <input name="username" type="text" value="{{form.username.data}}" placeholder="Choose a unique name"/>
+              </div>
+
+              <div class="required field">
+                <label>Un email valide pour vous écrire</label>
+                <input name="email" type="email" value="{{form.email.data}}" placeholder="Email to validate account"/>
+              </div>
+
+              <div class="required field">
+                <label>Un mot de passe pour accéder au compte</label>
+                <input name="password" type="password" value="" placeholder="Choose a password"/>
+              </div>
+
+              <div class="required field">
+                <label>Confirmation du mot de passe</label>
+                <input name="confirm" type="password" value="" placeholder="Type the same password"/>
+              </div>{{form.csrf_token}}
+
+              {% if  has_error %}
+                <div class="ui error message">
+                {% for field, err in form.errors.items() %}
+                  <strong>{{field}}</strong>
+                  {% for e in err %}<p>{{e}}</p>{% endfor %}
+                {% endfor %}
+                </div>
+              {% endif %}
+
+              <div class="ui hidden divider"></div>
+
+              <div id="errors" class="ui error message"></div>
+
+              <div class="ui hidden divider"></div>
+              <div class="field">
+                <button on-click="save" class="ui icon right floated primary button">
+                    <i class="ui save icon"> </i>Create
+                </button>
+                <div class="ui hidden divider"></div>
+                <div class="ui hidden divider"></div>
+                <div class="ui hidden divider"></div>
+              </div>
+            </div>
+          </form>
+          {% endif %}
+
+          <div class="ui divider"></div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+{% endblock %}
+
+
+{% block script %}
+{% endblock %}
