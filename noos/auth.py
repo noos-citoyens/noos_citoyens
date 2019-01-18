@@ -18,6 +18,68 @@ infos = {
 
 serialiser = URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
 
+
+ACTIVATION_EMAIL_SUBJECT = "NOos-Citoyens // Valider votre inscription à NOos-Citoyens "
+
+ACTIVATION_EMAIL = """
+
+        Bienvenue sur NOos-Citoyens.
+            
+        Vous êtes désormais incrit sur la plateforme NOos-Citoyens.
+        Pour commencer, veuillez activer votre compte en cliquant sur le lien ci-dessous ou collez le lien suivant 
+        dans la barre d'adresse de votre navigateur:
+        %s
+        
+        Nous vous contacterons par la suite pour vous tenir informé des avancées de la plate-forme.
+        Dans quelques jours vous recevrez un courriel pour vous prévenir de l'ouverture des votes.
+        
+        %s
+        Si vous n'avez pas demandé à vous inscrire sur NOos-Citoyens, vous n’avez rien à faire.
+        S'il vous plaît ne répondez pas à ce courriel qui est généré automatiquement.
+        
+        %s
+    """
+
+RECOVERY_EMAIL_SUBJECT = "NOos-Citoyens // Réinitialisez votre vos de passe"
+
+RECOVERY_EMAIL = """
+
+        Bonjour,
+
+        Vous avez récemment demandé une réinitialisation du mot de passe de votre compte sur NOos-Citoyens.
+        Pour changer votre mot de passe, cliquez ici ou collez le lien suivant dans la barre d’adresse de votre navigateur:
+        %s
+        Ce lien expirera dans 24 heures.
+
+        Si vous n’avez pas demandé la réinitialisation du mot de passe de votre compte sur NOos-Citoyens, vous n’avez rien à faire.
+        S’il vous plaît ne répondez pas à cet courriel qui est généré automatiquement.
+
+        N’hésitez pas à nous contacter pour coopérer si vous le souhaitez.
+        À bientôt,
+
+        %s
+    """
+
+EMAIL_FOOTER = """
+        
+        À bientot,
+
+        **L'équipe de NOos-Citoyens**
+        
+        *Toutes les données collectées sur la plate-forme NOos-Citoyens sont téléchargeables en version anonymisées 
+        dans des formats ouverts, ce qui permet à tout citoyen, de produire ses propres analyses sur ces données. 
+        Tous les outils qui permettent à NOos-Citoyens de fonctionner pour récolter, cartographier, analyser et synthétiser 
+        les propositions et les opinions citoyennes sont diffusés sous licence libre. 
+        Notre objectif est de répondre dans une totale transparence aux besoins de compréhension, de dialogue et d’expression des citoyens. 
+        Le plan n’est pas figé, le code s’écrit au fil des besoins et des événements. 
+        Chacun qui est intéressé peut participer à la vie de la plate-forme en émettant des propositions, 
+        en prenant position J'APPROUVE ou JE DÉSAPPROUVE les propositions, et en participant à l’analyse des données 
+        au travers de campagnes de «crowdsourcing» que nous allons bientôt mettre en place.
+        
+        Toutes les contributions sont les bienvenues.
+        N’hésitez pas à nous contacter pour coopérer ou établir des liens entre les sites utilisant les données récoltées par ces outils.*"
+"""
+
 class AuthError(Exception):
     pass
 
@@ -176,7 +238,7 @@ class RecoveryEmailForm(FlaskForm):
             user = Users.get_by_email(email)
             
             if user is None :
-                message = 'No account exists with this email'
+                message = "Aucun n'est enregisté avec cette adresse"
                 raise EmailNotExistsAccountError(message, email)
         return rv
 
@@ -191,14 +253,14 @@ class RecoveryPasswordForm(FlaskForm):
 
         # password complexity
         if len(self.password.data) < 8:
-            self.password.errors.append('Password length must be at least 8 ')
+            self.password.errors.append('La longueur de password minimal est de 8 caractères')
             rv = False
         return rv
 
 
 class SendMailError(Exception):
     def __init__(self, email, error):
-        super(SendMailError, self).__init__("can't send email to %s" % email)
+        super(SendMailError, self).__init__("Erreur lors de l'envoi d'un email à l'adresse %s" % email)
         self.email = email
         self.error = error
 
@@ -234,39 +296,8 @@ def send_activation_link(email):
     
     token = serialiser.dumps(("activation", email))
     url = current_app.config['HOST'] + url_for("auth.activate_account", token=token)
-
-    subject = "%s // Activez cette adresse" % current_app.config['HOST'][7:]
-
-    body = """
-        Bienvenu sur NOos-Citoyens.
-            
-        Vous êtes désormais incrit sur la plateforme NOos-Citoyens.
-        Pour valider votre inscription, veuillez suivre le lien suivant:
-         %s
-        
-        Nous vous contacterons par la suite pour vous tenir informé des avancées de la plate-forme.
-        Dans quelques jours vous recevrez un courriel pour vous prévenir de l'ouverture des votes.
-        
-        N’hésitez pas à nous contacter pour coopérer si vous le souhaitez.
-        À bientot,
-        
-        **L'équipe de NOos-Citoyens**
-        
-        
-        *Toutes les données collectées sur la plate-forme NOos-Citoyens sont téléchargeables en version anonymisées 
-        dans des formats ouverts, ce qui permet à tout citoyen, de produire ses propres analyses sur ces données. 
-        Tous les outils qui permettent à NOos-Citoyens de fonctionner pour récolter, cartographier, analyser et synthétiser 
-        les propositions et les opinions citoyennes sont diffusés sous licence libre. 
-        Notre objectif est de répondre dans une totale transparence aux besoins de compréhension, de dialogue et d’expression des citoyens. 
-        Le plan n’est pas figé, le code s’écrit au fil des besoins et des événements. 
-        Chacun qui est intéressé peut participer à la vie de la plate-forme en émettant des propositions, 
-        en prenant position J'APPROUVE ou JE DÉSAPPROUVE les propositions, et en participant à l’analyse des données 
-        au travers de campagnes de «crowdsourcing» que nous allons bientôt mettre en place.
-        
-        Toutes les contributions sont les bienvenues.
-        N’hésitez pas à nous contacter pour coopérer ou établir des liens entre les sites utilisant les données récoltées par ces outils.*
-        
-    """ % url
+    subject = ACTIVATION_EMAIL_SUBJECT
+    body = ACTIVATION_EMAIL % (url, EMAIL_FOOTER)
     
     noreply_send(subject, email, body.replace("    ", ""))
 
@@ -276,20 +307,8 @@ def send_password_recovery_link(email, hashed_password ):
     token = serialiser.dumps(("recovery", email, hashed_password  ))
     
     url = current_app.config['HOST'] + url_for("auth.change_password") + "/" + token
-    subject = "%s // Reset your password" % current_app.config['HOST'][7:]
-
-    body   = """
-        You recently requested a password reset.
-         
-        To change your password, click here or paste the following link into your browser:  
-
-        %s
-        
-        The link will expire in 24 hours.
-
-        If you didn't request this, you don't need to do anything; you won't receive any more email from us. Please do not reply to this e-mail;
-        
-    """ % url
+    subject = RECOVERY_EMAIL_SUBJECT
+    body   = RECOVERY_EMAIL  % (url, EMAIL_FOOTER)
     
     noreply_send(subject, email, body.replace("    ", ""))
 
