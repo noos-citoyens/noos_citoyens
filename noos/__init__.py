@@ -1,6 +1,6 @@
 import os
 from _datetime import datetime
-
+import html
 
 from flask import Flask, render_template, request, jsonify, g, redirect, url_for, flash, abort
 from flask_login import LoginManager, current_user
@@ -137,26 +137,26 @@ def create_app(test_config=None):
 
     @app.route('/newprop', methods=['GET','POST'])
     def new_prop():
-        g.user = "it's a me : mario"
-        if 'user' not in g:
-            return redirect("/login")
+        if current_user is None:
+            return redirect(url_for("auth.login"))
         if request.method == "GET":
             return render_template('newprop.xhtml', title="faire une proposition")
         else:
             try:
-                cause = request.form.get('cause')
-                content = request.form.get('content')
-                uid = g.user
+                cause = html.escape(request.form.get('cause'))
+                content = html.escape(request.form.get('content'))
                 date = datetime.now()
                 ip = request.remote_addr
                 p = datastorage.Proposition(ip=ip,
-                                            uid=uid,
+                                            uid=current_user.uuid,
                                             cause=cause,
                                             content=content,
                                             date=date)
                 p.save()
-                return render_template('newprop.xhtml', title="faire une nouvelle proposition", msg="Merci ! votre proposition a bien été enregistrée.")
+                print(p.meta.id)
+                return redirect(url_for('get_proposition', id=p.meta.id))
             except:
+                print("gné")
                 return render_template('newprop.xhtml', title="faire une proposition")
 
     @app.route('/proposition/<string:id>')
