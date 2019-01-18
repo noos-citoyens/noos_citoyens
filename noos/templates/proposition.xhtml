@@ -1,11 +1,11 @@
 {% extends "index.xhtml" %}
 
 {% block headers %}
-<meta property="og:title" content="Proposition sur NOos-citoyens"/>
+<meta property="og:title" content="{{ prop.username }} propose de {{ prop.content }}"/>
 <meta property="og:type" content="website"/>
 <meta property="og:image" content="https://noos-citoyens.fr/static/img/biglogo.jpeg"/>
 <meta property="og:url" content="https://noos-citoyens.fr/proposition{{ prop.id }}"/>
-<meta property="og:description" content="{{ prop.username }} propose de {{ prop.content }}"/>
+<meta property="og:description" content="Proposition sur NOos-citoyens"/>
 <meta property="og:locale" content="fr_FR"/>
 {% endblock %}
 
@@ -23,13 +23,11 @@
     <div class="extra content">
         <p>Il vous sera bientôt possible d'ajouter des mots clefs et de prendre position pour ou contre cette proposition</p>
     </div>
+    <div class="content">
+        <p>Vous pouvez partagez cette proposition avec ce lien<br/> <a href="{{ url_for('get_proposition', id=prop.id) }}">{{ url_for('get_proposition', id=prop.id, _external=True) }}</a> </p>
+    </div>
 </div>
 </div>
-
-<div class="ui hidden divider"></div>
-<div class="ui hidden divider"></div>
-
-<p>Vous pouvez partagez cette proposition avec ce lien<br/> <a href="{{ url_for('get_proposition', id=prop.id) }}">{{ url_for('get_proposition', id=prop.id, _external=True) }}</a> </p>
 
 
 {% endblock %}
