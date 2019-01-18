@@ -173,4 +173,11 @@ def create_app(test_config=None):
         else:
             return abort(404)
 
+    @app.before_request
+    def before_request():
+        if request.url.startswith('http://'):
+            url = request.url.replace('http://', 'https://', 1)
+            code = 301
+            return redirect(url, code=code)
+
     return app
