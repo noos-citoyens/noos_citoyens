@@ -3,20 +3,22 @@
 {% block headers %}
 <meta property="og:title" content="Proposition sur NOos-citoyens"/>
 <meta property="og:type" content="website"/>
-<meta property="og:image" content="http://noos-citoyens.fr/static/img/biglogo.jpeg"/>
-<meta property="og:url" content="http://noos-citoyens.fr/proposition{{ prop.id }}"/>
+<meta property="og:image" content="https://noos-citoyens.fr/static/img/biglogo.jpeg"/>
+<meta property="og:url" content="https://noos-citoyens.fr/proposition{{ prop.id }}"/>
 <meta property="og:description" content="{{ prop.username }} propose de {{ prop.content }}"/>
 <meta property="og:locale" content="fr_FR"/>
 {% endblock %}
 
 {% block mainzone %}
+
+<h3>Vous pouvez partagez cette proposition en copiant <a href="{{ url_for('get_proposition', id=prop.id) }}">ce lien</a> </h3>
 <div class="ui one cards">
 <div class="ui large card">
     <div class="content">
         <p>à cause de <strong>{{ prop.cause}}</strong></p>
-      <div class="header">{{ prop.username }}</div>
+      <div class="content">{{ prop.username }}</div>
         <div class="meta">propose de</div>
-      <div class="description">
+      <div class="header">
          <strong>{{ prop.content }}</strong>
       </div>
    </div>

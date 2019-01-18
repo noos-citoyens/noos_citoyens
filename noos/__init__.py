@@ -147,16 +147,19 @@ def create_app(test_config=None):
                 content = html.escape(request.form.get('content'))
                 date = datetime.now()
                 ip = request.remote_addr
+                if ip is None or ip == '':
+                    if 'X-Forwarded-For' in request.headers:
+                        ip = request.headers.getlist("X-Forwarded-For")[0].rpartition(',')[-1]
+                    else:
+                        ip = "127.0.0.1"
                 p = datastorage.Proposition(ip=ip,
                                             uid=current_user.uuid,
                                             cause=cause,
                                             content=content,
                                             date=date)
                 p.save()
-                print(p.meta.id)
                 return redirect(url_for('get_proposition', id=p.meta.id))
             except:
-                print("gné")
                 return render_template('newprop.xhtml', title="faire une proposition")
 
     @app.route('/proposition/<string:id>')
@@ -164,6 +167,7 @@ def create_app(test_config=None):
         p = datastorage.Proposition.get(id, ignore=404)
         if p is not None:
             data = p.to_dict()
+            data['id'] = p.meta.id
             user = datastorage.user_db.Users.get_one_by('uuid', p.uid)
             if user is not None:
                 data['username'] = user.username
