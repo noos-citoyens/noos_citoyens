@@ -238,7 +238,7 @@ def send_activation_link(email):
     subject = "%s // Activez cette adresse" % current_app.config['HOST'][7:]
 
     body = """
-        Bienvenu sur NOos-citoyen
+        Bienvenu sur NOos-Citoyens.
             
         Vous êtes désormais incrit sur la plateforme NOos-Citoyens.
         Pour valider votre inscription, veuillez suivre le lien suivant:
@@ -263,7 +263,7 @@ def send_activation_link(email):
         en prenant position J'APPROUVE ou JE DÉSAPPROUVE les propositions, et en participant à l’analyse des données 
         au travers de campagnes de «crowdsourcing» que nous allons bientôt mettre en place.
         
-        Toutes les contributions sont les bienvenues
+        Toutes les contributions sont les bienvenues.
         N’hésitez pas à nous contacter pour coopérer ou établir des liens entre les sites utilisant les données récoltées par ces outils.*
         
     """ % url
@@ -296,7 +296,7 @@ def send_password_recovery_link(email, hashed_password ):
 
 def noreply_send(subject, to, body):
     try:
-        message = Message(sender = ( "noos-citoyen", "ne.pas.repondre@padagraph.io" ))
+        message = Message(sender = ( "noos-citoyen", "ne.pas.repondre@noos-citoyens.fr" ))
         message.recipients = [to]
         message.body = body
         message.subject = subject
@@ -325,7 +325,7 @@ def authenticate_user(request):
         if user is None:
             raise EmailNotExistsAccountError("Aucun compte n'est enregistré avec cette adresse.", email)
         if not user.is_active():
-            raise UserAccountNotActiveError(user.uuid, email, "Un compte est crée avec cette adresse mais n a pas été activé.")
+            raise UserAccountNotActiveError(user.uuid, email, "Un compte est crée avec cette adresse mais n'a pas été activé.")
 
     return Users.authenticate(email, password, hashed=False)
 
