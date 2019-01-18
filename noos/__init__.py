@@ -12,6 +12,7 @@ from .datastorage.user_db import Users, User
 def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(
+        wsgi.url_scheme='https',
         SECRET_KEY='dev',
         ES_ADDRESS="localhost",
         USER_DATABASE = os.path.join(app.instance_path, 'noos_users.sqlite'),
@@ -172,12 +173,5 @@ def create_app(test_config=None):
             return render_template('proposition.xhtml', prop=data)
         else:
             return abort(404)
-
-    @app.before_request
-    def before_request():
-        if request.url.startswith('http://'):
-            url = request.url.replace('http://', 'https://', 1)
-            code = 301
-            return redirect(url, code=code)
 
     return app
