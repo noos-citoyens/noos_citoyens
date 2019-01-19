@@ -1,4 +1,4 @@
-{% extends "index.xhtml" %}
+ {% extends "index.xhtml" %}
 
 {% block mainzone %}
 <h1 class="ui centered header">Faire une proposition</h1>
@@ -25,7 +25,10 @@
 <div id="results"  class="ui segment" style="visibility: hidden">
 <p>Voici quelques propositions déjà soumises. Vous pourrez revenir la soutenir ou ajouter des mots-clefs dans les prochaines étapes</p>
 <p>Si après avoir lu ces propositions vous estimez que la votre est originale, Validez là !</p>
-<div id="props_similaires" class="ui divided huge list segment"></div>
+<div class="ui segment">
+    <div id="props_similaires" class="ui divided huge list segment"></div>
+    <div id="page_menu" class="ui pagination menu"></div>
+</div>
 <div id="submit_btn" class="ui submit button">Valider la nouvelle proposition</div>
 </div>
 </form>

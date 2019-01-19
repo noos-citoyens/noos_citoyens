@@ -16,30 +16,20 @@
 {% block menu %}
 <div class="ui stackable menu">
     <div class="ui container">
-        <a href="#" class="header item">
+        <a href="/" class="header item">
             Noos-Citoyens
         </a>
-        <a href="#" class="item">Accueil</a>
-        <div class="ui simple dropdown item">
-            <b>Participer</b><i class="dropdown icon"></i>
-            <div class="menu">
-                {%if current_user.is_authenticated %}
-                <a href="{{ url_for('new_prop') }}" class="item">Proposer</a>
-                <a href="#" class="disabled item">Voter</a>
-                <a href="#" class="disabled item">Explorer</a>
-                {% else %}
-                <a href="#" class="disabled item">Proposer</a>
-                <a href="#" class="disabled item">Voter</a>
-                <a href="#" class="disabled item">Explorer</a>
-                {%endif%}
-            </div>
-        </div>
-
-        <a href="#" class="item">Qu'est-ce que c'est ?</a>
-        <a href="#" class="item">Presse/Actu</a>
-        <a href="#" class="item">Contact</a>
-
-         <div class="ui simple dropdown item">
+        <a href="https://noos-citoyens.com/" class="item">Informations</a>
+        {%if current_user.is_authenticated %}
+            <a href="{{ url_for('new_prop') }}" class="item">Proposer</a>
+            <a href="#" class="disabled item">Voter</a>
+            <a href="#" class="disabled item">Explorer</a>
+        {% else %}
+            <a href="#" class="disabled item">Proposer</a>
+            <a href="#" class="disabled item">Voter</a>
+            <a href="#" class="disabled item">Explorer</a>
+        {%endif%}
+         <div class="ui simple dropdown right item">
             <b>{% if not current_user.is_authenticated%}compte{%endif%} {{current_user.username}} </b><i class="dropdown icon"></i>
             <div class="menu">
                 {% if not current_user.is_authenticated%}

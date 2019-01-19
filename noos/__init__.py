@@ -118,7 +118,7 @@ def create_app(test_config=None):
     @app.route('/')
     def index():
         data = {'a':1, 'b': 2}
-        return render_template('index.xhtml', title="ceci est un titre", data=data)
+        return render_template('index.xhtml', title="Noos - plateforme de revendications citoyennes", data=data)
 
     @app.route('/test')
     def test_page():
@@ -128,14 +128,16 @@ def create_app(test_config=None):
     def test_query():
         params = request.get_json(force=True)
         q = params.get('query', None)
-        limit = max(50, params.get('limit', 10))
+        limit = min(10, params.get('limit', 10))
+        start = params.get('start',0)
         if q:
-            props = datastorage.Proposition.simple_search(q, limit)
+            results = datastorage.Proposition.simple_search(q, start, limit)
             data = []
+            props = results['hits']
             for p in props:
                 data.append(p.to_dict())
                 data[-1]['id'] = p.meta.id
-            return jsonify(data)
+            return jsonify({"count":results['count'], "hits":data})
         else:
             return jsonify([])
 

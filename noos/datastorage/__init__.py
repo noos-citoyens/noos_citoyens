@@ -27,11 +27,11 @@ class Proposition(Document):
 
 
     @staticmethod
-    def simple_search(query, limit):
-        s = Proposition.search()[0:limit].query("match", content=query)
+    def simple_search(query, start, limit):
+        s = Proposition.search()[start:start+limit].query("match", content=query)
+        count = s.count()
         results = s.execute()
-        for p in results:
-            yield p
+        return {"count":count, "hits": results.hits}
 
 
     class Index:
