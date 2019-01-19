@@ -10,7 +10,7 @@ export default class NewPropositionPage {
         this.compareEL.onclick = ev => this.query_sims(ev, this)
         this.submitEL.onclick = ev => this.submit(ev, this)
         this.page = 1
-        this.itemPerPage = 3
+        this.itemPerPage = 5
 
     }
 
