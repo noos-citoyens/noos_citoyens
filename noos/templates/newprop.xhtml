@@ -4,8 +4,7 @@
 <h1 class="ui centered header">Faire une proposition</h1>
 <div class="ui segment">
 <p>{{ msg }}</p>
-<p>Faites vos propositions...</p>
-<p>guidelines, quelques conseils</p>
+<p>Entrez des phrases simples, efforcez vous d'inscrire une seule solution par proposition. Vous pouvez cependant écrire successivement plusieurs propositions les unes après les autres à propos d'une même problématique</p>
 </div>
 <form id="form" action="{{url_for('new_prop')}}" method="post">
 <div class="ui segment">
@@ -16,7 +15,7 @@
         </div>
         <div class="inline fields">
             <label>Je propose de...</label>
-            <div class="field"><textarea id="content" name="content" placeholder="changer quelquechose" cols="58" rows="4"></textarea></div>
+            <div class="field"><textarea id="content" name="content" placeholder="changer quelque chose" cols="58" rows="4"></textarea></div>
         </div>
         <div id="compare_btn" class="ui submit button">Comparer</div>
     </div>

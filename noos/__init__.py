@@ -164,17 +164,23 @@ def create_app(test_config=None):
                                             content=content,
                                             date=date)
                 p.save()
-                return redirect(url_for('get_proposition', id=p.meta.id))
+                return redirect(url_for('get_proposition', id=p.meta.id, msg="nouveau"))
             except:
                 return render_template('newprop.xhtml', title="faire une proposition")
 
-
+    @app.route('/proposition/<string:id>/<string:msg>')
     @app.route('/proposition/<string:id>')
     @app.route('/proposition')
-    def get_proposition(id=None):
+    def get_proposition(id=None,msg=None):
         p = datastorage.Proposition.get(id, ignore=404)
         if p is not None:
             data = p.to_dict()
+            if msg:
+                data['msg'] = """
+                Merci de votre contribution, il vous sera possible prochainement d'accéder à la liste complète de toutes les propositions
+                """
+            else:
+                data['msg'] = ""
             data['id'] = p.meta.id
             user = datastorage.user_db.Users.get_one_by('uuid', p.uid)
             if user is not None:
