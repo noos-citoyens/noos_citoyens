@@ -149,8 +149,8 @@ def create_app(test_config=None):
             return render_template('newprop.xhtml', title="faire une proposition")
         else:
             try:
-                cause = html.escape(request.form.get('cause'))
-                content = html.escape(request.form.get('content'))
+                cause = html.escape(request.form.get('cause'), quote=False)
+                content = html.escape(request.form.get('content'), quote=False)
                 date = datetime.now()
                 ip = request.remote_addr
                 if ip is None or ip == '':

@@ -21,13 +21,14 @@
       </div>
    </div>
     <div class="extra content">
-        <p>Il vous sera bientôt possible d'ajouter des mots clefs et de prendre position pour ou contre cette proposition</p>
+        <p>Il vous sera bientôt possible d'ajouter des mots clefs et de prendre position pour ou contre cette proposition et de télécharger les données</p>
     </div>
     <div class="content">
-        <p>Vous pouvez partagez cette proposition avec ce lien<br/> <a href="{{ url_for('get_proposition', id=prop.id) }}">{{ url_for('get_proposition', id=prop.id, _external=True) }}</a> </p>
+        <p>Vous pouvez partagez cette proposition avec ce lien: <br/> <a href="{{ url_for('get_proposition', id=prop.id) }}">{{ url_for('get_proposition', id=prop.id, _external=True) }}</a> </p>
+        <button class="ui button" onclick="navigator.clipboard.writeText('{{ url_for('get_proposition', id=prop.id) }}')">copier dans le presse-papier</button>
     </div>
 </div>
-<p>{{ prop.msg }}</p>
+<div class="ui justified text container">{{ prop.msg }}</div>
 </div>
 
 
