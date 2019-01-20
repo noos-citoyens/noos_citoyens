@@ -476,7 +476,8 @@ def blueprint(*args, **kwargs):
                                    username=user.username,
                                    email=user.email)
 
-        except :
+        except Exception as err:
+            current_app.logger.info("Resend_validation error %s /n" % err)
             return render_template('account-creation.xhtml', step="token-invalid")
 
     @api.route("/activate-account/<string:token>", methods=['GET'])

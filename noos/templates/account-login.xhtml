@@ -9,7 +9,7 @@
 
           {% if  step == "login" %}
           <div style="max-width:320px" class="column">
-            <h3 class="ui header">Log in to get started</h3>
+            <h3 class="ui header">Connection</h3>
             <form action="{{url_for('auth.login')}}" method="POST" class="ui large form {{ 'error' if fail else '' }}">
               <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
               <div class="ui stacked segment">
