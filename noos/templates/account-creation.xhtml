@@ -58,12 +58,12 @@
             <p>
                <strong>{{email}}</strong> <br/>
             </p>
-            {% if  activ %}<p> Un compte est enregistrer avec cette adresse.<br/>
+            {% if  activ %}<p> Un compte est enregistré avec cette adresse.<br/>
                 <a href="/">Connection </a><br/></p>{% endif %}
             {% if  activ == False  %}
               <p>Vérifiez vos email, un lien d'activation vous a été envoyé lors de votre inscription<br/></p>
                 <p>
-                 <a  class="ui primary button" href="{{url_for('auth.resend_validation', uuid=uuid)}}">Demander un nouveau lien d'activation.</a>
+                 <a  class="ui primary button" href="{{url_for('auth.resend_validation', uuid=uuid)}}">Demandez un nouveau lien d'activation.</a>
               </p>
             {% endif %}
           {% endif %}
