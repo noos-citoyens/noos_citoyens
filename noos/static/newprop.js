@@ -74,7 +74,7 @@ export default class NewPropositionPage {
 
     buildHTML(prop) {
         var cause = prop.cause == "" ? "" : `en colère contre <strong>${prop.cause}</strong> `
-        return `<a href="${this.propURL}/${prop.id}">${cause}je propose de <strong>${prop.content}</strong></a>`
+        return `<a href="${this.propURL}/${prop.id}">${cause} on propose de <strong>${prop.content}</strong></a>`
     }
 
 
