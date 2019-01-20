@@ -3,7 +3,7 @@ from _datetime import datetime
 import html
 
 from flask import Flask, render_template, request, jsonify, g, redirect, url_for, flash, abort, current_app
-from flask_login import LoginManager, current_user
+from flask_login import LoginManager, current_user, login_required
 
 from .datastorage.user_db import Users, User
 
@@ -125,6 +125,7 @@ def create_app(test_config=None):
         return render_template('test.xhtml', title='page de test')
 
     @app.route('/search_propositions', methods=['POST'])
+    @login_required
     def test_query():
         params = request.get_json(force=True)
         q = params.get('query', None)
@@ -142,6 +143,7 @@ def create_app(test_config=None):
             return jsonify([])
 
     @app.route('/newprop', methods=['GET','POST'])
+    @login_required
     def new_prop():
         if current_user is None:
             return redirect(url_for("auth.login"))

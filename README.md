@@ -91,3 +91,26 @@ Effacer l'index d'elasticsearch (au cas où)
 
 Lancer le serveur de dev : 
 `FLASK_APP=noos flask run`
+
+
+### Semantic ui css
+Nous avons supprimé l'usage des fonts google qui sont utilisées par default avec semantic-ui.
+Seuls les fichiers `dist` sont dans le dépot. 
+
+* edit site.variables
+
+ ```
+   /*******************************
+         User Global Variables
+    *******************************/
+
+    @importGoogleFonts: false;
+
+    @headerFont : 'Open Sans', 'Helvetica Neue', Arial, Helvetica, sans-serif; 
+    @pageFont : 'Oswald', 'Helvetica Neue', Arial, Helvetica, sans-serif; 
+    @googleFontFamily : 'Open+Sans:400italic,400|Oswald:400,700'; 
+```
+
+* gbuild semantic 
+
+   `gulp build`
