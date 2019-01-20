@@ -85,7 +85,7 @@ def populate_es(csv_file):
             else:
                 click.echo(row[1])
                 p = Proposition(ip="127.0.0.1",
-                                cause="test",
+                                cause="",
                                 content=row[1],
                                 keywords=[k.strip() for k in row[2].split(",")],
                                 uid=user.uuid,
