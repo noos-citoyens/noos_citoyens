@@ -139,7 +139,6 @@ class CreateUserForm(FlaskForm):
 
     def validate(self):
         rv = FlaskForm.validate(self)
-        print(rv)
 
         # parse invitation token
         invitation = self.invitation.data
@@ -438,7 +437,6 @@ def blueprint(*args, **kwargs):
             form.invitation.data = invitation
 
             if not form.validate():
-                print (form.invitation.errors)
                 if len(form.invitation.errors):
                     return render_template('account-creation.xhtml' , step="invitation-invalid")
 
@@ -518,8 +516,9 @@ def blueprint(*args, **kwargs):
                     user = Users.get_by_email(email)
                     send_password_recovery_link(email, user.password )
                 return render_template('account-recovery.xhtml', step="email-sent", email= email )
-            except :
 
+            except Exception as err:
+                current_app.logger.info("password-recovery error %s /n" % (err))
                 return render_template('account-recovery.xhtml' , step="token-invalid" )
 
         return render_template('account-recovery.xhtml', step="email-form")

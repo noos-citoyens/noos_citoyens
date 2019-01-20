@@ -249,7 +249,7 @@ class Users(object):
         r = cursor.rowcount
         db.commit()
         cursor.close()
-        print("activate:", email, r)
+       
         return True
 
     @staticmethod
