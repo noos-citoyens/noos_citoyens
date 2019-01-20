@@ -118,7 +118,7 @@ def create_app(test_config=None):
     @app.route('/')
     def index():
         data = {'a':1, 'b': 2}
-        return render_template('index.xhtml', title="ceci est un titre", data=data)
+        return render_template('index.xhtml', title="Noos - plateforme de revendications citoyennes", data=data)
 
     @app.route('/test')
     def test_page():
@@ -128,14 +128,16 @@ def create_app(test_config=None):
     def test_query():
         params = request.get_json(force=True)
         q = params.get('query', None)
-        limit = max(50, params.get('limit', 10))
+        limit = min(10, params.get('limit', 10))
+        start = params.get('start',0)
         if q:
-            props = datastorage.Proposition.simple_search(q, limit)
+            results = datastorage.Proposition.simple_search(q, start, limit)
             data = []
+            props = results['hits']
             for p in props:
                 data.append(p.to_dict())
                 data[-1]['id'] = p.meta.id
-            return jsonify(data)
+            return jsonify({"count":results['count'], "hits":data})
         else:
             return jsonify([])
 
@@ -147,8 +149,8 @@ def create_app(test_config=None):
             return render_template('newprop.xhtml', title="faire une proposition")
         else:
             try:
-                cause = html.escape(request.form.get('cause'))
-                content = html.escape(request.form.get('content'))
+                cause = html.escape(request.form.get('cause'), quote=False)
+                content = html.escape(request.form.get('content'), quote=False)
                 date = datetime.now()
                 ip = request.remote_addr
                 if ip is None or ip == '':
@@ -162,17 +164,23 @@ def create_app(test_config=None):
                                             content=content,
                                             date=date)
                 p.save()
-                return redirect(url_for('get_proposition', id=p.meta.id))
+                return redirect(url_for('get_proposition', id=p.meta.id, msg="nouveau"))
             except:
                 return render_template('newprop.xhtml', title="faire une proposition")
 
-
+    @app.route('/proposition/<string:id>/<string:msg>')
     @app.route('/proposition/<string:id>')
     @app.route('/proposition')
-    def get_proposition(id=None):
+    def get_proposition(id=None,msg=None):
         p = datastorage.Proposition.get(id, ignore=404)
         if p is not None:
             data = p.to_dict()
+            if msg:
+                data['msg'] = """
+                Merci de votre contribution, il vous sera possible prochainement d'accéder à la liste complète de toutes les propositions
+                """
+            else:
+                data['msg'] = ""
             data['id'] = p.meta.id
             user = datastorage.user_db.Users.get_one_by('uuid', p.uid)
             if user is not None:
