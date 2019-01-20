@@ -497,7 +497,7 @@ def blueprint(*args, **kwargs):
             return render_template('account-creation.xhtml' , step="active", username=user.username)
             
         except Exception as err :
-            current_app.logger.info("Activation error %s /n %s " % (email,err))
+            current_app.logger.info("Activation error %s /n %s " % (err))
             return render_template('account-creation.xhtml', step="token-invalid" )
 
     # === / password recovery ===

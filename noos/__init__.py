@@ -88,16 +88,17 @@ def create_app(test_config=None):
 
         def handle_error(code, title, message):
             def wrapped(e):
+                message = e.message if hasattr(e, 'message') else ""
                 params = {'error_code': code,
                           'error_title': title,
-                          'error_message': e.message if hasattr(e, 'message') else ""}
-
+                          'error_message': message
+                          }
                 load_from_cookie = getattr(g, 'load_from_cookie', False)
                 load_from_request = getattr(g, 'load_from_request', False)
 
                 if code == 500:
                     params['error_title'] = "C'est une erreur."
-                    params['error_message'] = "There is something wrong. %s " % e.message
+                    params['error_message'] = "There is something wrong. %s " % message
 
                 if code == 401 and load_from_cookie:
                     return redirect('/')
@@ -107,7 +108,6 @@ def create_app(test_config=None):
             return wrapped
 
         for code_or_err, status, title, msg in errors:
-            pass
             app.register_error_handler(code_or_err, handle_error(status, title, msg))
 
 
