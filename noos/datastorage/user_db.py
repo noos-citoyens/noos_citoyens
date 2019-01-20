@@ -108,9 +108,10 @@ class User(object):
         cursor.execute(change_user_password_SQL, (hash_password, self.email))
         r = cursor.rowcount
         db.commit()
-        self.password = hash_password
-        self.verified = True
         cursor.close()
+
+        self.password = hash_password
+        self._verified = True
         return r == 1
 
     def verify_password(self, password, hashed=True):

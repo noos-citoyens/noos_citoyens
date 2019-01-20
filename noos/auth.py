@@ -107,7 +107,7 @@ def handleEmailExistsValidationError(err):
                                 step="email-in-use",
                                 token=token,
                                 email=email,
-                                uuid = user.uuid,
+                                uuid = err.user.uuid,
                                 username = err.user.username,
                                 activ = err.user.is_active() )
 
