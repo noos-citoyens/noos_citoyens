@@ -2,7 +2,7 @@ import os
 from _datetime import datetime
 import html
 
-from flask import Flask, render_template, request, jsonify, g, redirect, url_for, flash, abort
+from flask import Flask, render_template, request, jsonify, g, redirect, url_for, flash, abort, current_app
 from flask_login import LoginManager, current_user
 
 from .datastorage.user_db import Users, User
@@ -15,7 +15,7 @@ def create_app(test_config=None):
         SECRET_KEY='dev',
         ES_ADDRESS="localhost",
         USER_DATABASE = os.path.join(app.instance_path, 'noos_users.sqlite'),
-        HOST = "noos-citoyens.fr", #"#"http://localhost:5000",
+        HOST = "http://localhost:5000",
         INVITATION_EMAIL = "no-reply@noos-citoyens.fr",
         ACCOUNT_CREATION_NEEDS_INVITATION = False,
         AUTH_TOKEN_MAX_AGE = 30 * 24 * 3600,  # default 30 days
@@ -187,8 +187,7 @@ def create_app(test_config=None):
                 data['username'] = user.username
             else:
                 data['username'] = "illustre anonyme"
-            return render_template('proposition.xhtml', prop=data)
+            return render_template('proposition.xhtml', prop=data, host=current_app.config['HOST'])
         else:
             return abort(404)
-
     return app
