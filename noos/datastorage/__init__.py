@@ -80,7 +80,7 @@ def populate_es(csv_file):
     with open(csv_file) as f:
         reader = csv.reader(f)
         for row in reader:
-            if row[0] is '' or row[0].startswith("@"):
+            if row[1] is '' or row[0].startswith("@"):
                 continue
             else:
                 click.echo(row[1])
