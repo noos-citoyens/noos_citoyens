@@ -24,22 +24,24 @@ export default class NewPropositionPage {
         var nbPages = Math.ceil(count / this.itemPerPage)
         nbPages = Math.min(10, nbPages)
         console.log(nbPages, "pages")
-        var data = []
-        for(var i = 1;i <= nbPages; i++) data.push(i) ;
-        console.log(data)
+        if(nbPages > 1) {
+            var data = []
+            for(var i = 1;i <= nbPages; i++) data.push(i) ;
+            console.log(data)
 
-        var sel = d3.select("#page_menu")
-            .selectAll("a.item")
-            .data(data)
-            .text(d => d)
-            .attr("class", d => (d == this.page) ? "active item" : "item")
-            .on('click',d => {this.selectPage(d); return false})
-        sel.enter()
-            .append("a")
-            .attr("class", d => d == this.page ? "active item" : "item")
-            .text(d => d)
-            .on('click',d => {this.selectPage(d); return false})
-        sel.exit().remove()
+            var sel = d3.select("#page_menu")
+                .selectAll("a.item")
+                .data(data)
+                .text(d => d)
+                .attr("class", d => (d == this.page) ? "active item" : "item")
+                .on('click',d => {this.selectPage(d); return false})
+            sel.enter()
+                .append("a")
+                .attr("class", d => d == this.page ? "active item" : "item")
+                .text(d => d)
+                .on('click',d => {this.selectPage(d); return false})
+            sel.exit().remove()
+        }
     }
 
     query_sims(ev)  {
@@ -71,7 +73,8 @@ export default class NewPropositionPage {
 
 
     buildHTML(prop) {
-        return `<a href="${this.propURL}/${prop.id}">en colère contre <strong>${prop.cause}</strong> je propose de <strong>${prop.content}</strong></a>`
+        var cause = prop.cause == "" ? "" : `en colère contre <strong>${prop.cause}</strong> `
+        return `<a href="${this.propURL}/${prop.id}">${cause}je propose de <strong>${prop.content}</strong></a>`
     }
 
 
