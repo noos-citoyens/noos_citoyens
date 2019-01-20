@@ -20,13 +20,13 @@
                 </div>
                 <div class="field">
                   <div class="ui left icon input"><i class="lock icon"></i>
-                    <input type="password" placeholder="password" name="password">
+                    <input type="password" placeholder="mot de passe" name="password">
                   </div>
                 </div>
                 <div style="margin-bottom:0px" class="field">
                   <input type="submit" value="Login" class="ui fluid large submit primary button">{% if fail %}
                   <div class="ui small error message">
-                    <p>Login or password incorrect.</p>
+                    <p>pseudo ou mot de passe incorrect.</p>
                   </div>{% endif %}
                 </div>
                 <div class="field"><a href="{{url_for('auth.password_recovery')}}" style="font-size:smaller;">Mot de passe perdu ?</a></div>
