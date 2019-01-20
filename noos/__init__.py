@@ -195,4 +195,9 @@ def create_app(test_config=None):
             return render_template('proposition.xhtml', prop=data, host=current_app.config['HOST'])
         else:
             return abort(404)
+
+
+    @app.route('/guide')
+    def guide():
+        return render_template('guidelines.xhtml', title="Conseils de rédaction")
     return app
