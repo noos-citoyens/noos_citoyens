@@ -149,8 +149,8 @@ def create_app(test_config=None):
             return render_template('newprop.xhtml', title="faire une proposition")
         else:
             try:
-                cause = html.escape(request.form.get('cause'), quote=False)
-                content = html.escape(request.form.get('content'), quote=False)
+                cause = html.escape(request.form.get('cause'), quote=False).strip()
+                content = html.escape(request.form.get('content'), quote=False).strip()
                 date = datetime.now()
                 ip = request.remote_addr
                 if ip is None or ip == '':
@@ -158,13 +158,16 @@ def create_app(test_config=None):
                         ip = request.headers.getlist("X-Forwarded-For")[0].rpartition(',')[-1]
                     else:
                         ip = "127.0.0.1"
-                p = datastorage.Proposition(ip=ip,
-                                            uid=current_user.uuid,
-                                            cause=cause,
-                                            content=content,
-                                            date=date)
-                p.save()
-                return redirect(url_for('get_proposition', id=p.meta.id, msg="nouveau"))
+                if 5 < len(content) < 500:
+                    p = datastorage.Proposition(ip=ip,
+                                                uid=current_user.uuid,
+                                                cause=cause,
+                                                content=content,
+                                                date=date)
+                    p.save()
+                    return redirect(url_for('get_proposition', id=p.meta.id, msg="nouveau"))
+                else:
+                    return render_template('newprop.xhtml', title="faire une proposition") #todo : message d'erreur avec lien vers les guidelines
             except:
                 return render_template('newprop.xhtml', title="faire une proposition")
 

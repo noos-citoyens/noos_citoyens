@@ -45,9 +45,12 @@ export default class NewPropositionPage {
     }
 
     query_sims(ev)  {
-            this.resultsEL.style.visibility = "visible";
             const q = this.contentEl.value ;
-            if(q == "") return ;
+            if(q.length < 5 || q.length > 300) {
+                document.getElementById("message").setAttribute("class","ui warning visible message")
+                return ;
+            }
+            this.resultsEL.style.visibility = "visible";
             var start = (this.page - 1) * this.itemPerPage
             var limit = this.itemPerPage
             d3.json("/search_propositions", {'method': "POST", 'body':JSON.stringify({'query':q, 'start':start, 'limit':limit})}).then(results => {
@@ -60,7 +63,7 @@ export default class NewPropositionPage {
                     .html(p => this.buildHTML(p, this))
                 items.enter()
                     .append("div")
-                    .attr("class", "prop ui item")
+                    .attr("class", "prop ui huge segment comment")
                     .html(p => this.buildHTML(p, this))
                 items.exit().remove()
             })
@@ -73,8 +76,8 @@ export default class NewPropositionPage {
 
 
     buildHTML(prop) {
-        var cause = prop.cause == "" ? "" : `en colère contre <strong>${prop.cause}</strong> `
-        return `<a href="${this.propURL}/${prop.id}">${cause} on propose de <strong>${prop.content}</strong></a>`
+        var cause = prop.cause == "" ? "" : `<span class="metadata">À cause de </span> ${prop.cause} `
+        return `<div class="content"><span class="text"><a href="${this.propURL}/${prop.id}">${cause} <span class="metadata">on propose de</span> ${prop.content}</span></a></div>`
     }
 
 
