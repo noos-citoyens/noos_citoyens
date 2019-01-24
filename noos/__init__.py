@@ -132,7 +132,7 @@ def create_app(test_config=None):
         limit = min(10, params.get('limit', 10))
         start = params.get('start',0)
         if q:
-            results = datastorage.Proposition.simple_search(q, start, limit)
+            results = datastorage.Proposition.simple_search(q, limit)
             data = []
             props = results['hits']
             for p in props:
