@@ -27,11 +27,11 @@ class Proposition(Document):
 
 
     @staticmethod
-    def simple_search(query, start, limit):
-        s = Proposition.search()[start:start+limit].query("match", content=query)
-        count = s.count()
+    def simple_search(query, limit):
+        s = Proposition.search()[0:limit].query("match", content=query)
         results = s.execute()
-        return {"count":count, "hits": results.hits}
+        for p in results:
+            yield p
 
 
     class Index:
@@ -80,12 +80,12 @@ def populate_es(csv_file):
     with open(csv_file) as f:
         reader = csv.reader(f)
         for row in reader:
-            if row[1] is '' or row[0].startswith("@"):
+            if row[0] is '' or row[0].startswith("@"):
                 continue
             else:
                 click.echo(row[1])
                 p = Proposition(ip="127.0.0.1",
-                                cause="",
+                                cause="test",
                                 content=row[1],
                                 keywords=[k.strip() for k in row[2].split(",")],
                                 uid=user.uuid,

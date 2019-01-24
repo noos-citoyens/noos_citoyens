@@ -75,6 +75,8 @@ EMAIL_FOOTER = """
         en prenant position J'APPROUVE ou JE DÉSAPPROUVE les propositions, et en participant à l’analyse des données 
         au travers de campagnes de «crowdsourcing» que nous allons bientôt mettre en place.
         
+        Suppression de compte : https://noos-citoyens.fr/compte/suppression-de-compte
+        
         Toutes les contributions sont les bienvenues.
         N’hésitez pas à nous contacter pour coopérer ou établir des liens entre les sites utilisant les données récoltées par ces outils.*"
 """
@@ -526,14 +528,14 @@ def blueprint(*args, **kwargs):
     @api.route("/change-password", methods=['POST'])
     @api.route("/change-password/<string:token>", methods=['GET'])
     def change_password(token=None):
-        form =  RecoveryPasswordForm()
+        """ modification du password """
+
+        form = RecoveryPasswordForm()
 
         if request.method == "POST":
             token = form.token.data
 
         try :
-            # validate 24h token
-            
             seed, email, pwd = serialiser.loads(token, max_age=current_app.config['RECOVERY_TOKEN_MAX_AGE'])
             current_app.logger.info("change-password")
             if seed != "recovery":
@@ -556,24 +558,21 @@ def blueprint(*args, **kwargs):
 
         return render_template('account-recovery.xhtml', step="password-form", token=token, has_error=False)
 
-    @api.route("/u/<string:uid>", methods=['GET'])
-    @login_required
-    def user(uuid):
-        """ Get public info for user <user> """
-        user = Users.get_by_uuid(uuid)
-        return jsonify({ uuid : user.as_dict() })
 
-    @api.route("/me", methods=['GET'])
+    @api.route("/suppression-de-compte", methods=['GET'])
     @login_required
-    def me():
+    def delete_account_form():
+        """formulaire de désinscription """
         user = current_user
-        return jsonify(user.as_dict())
+        return render_template('account-deletion.xhtml', step="delete-account", uuid=user.uuid, email = user.email)
 
-    @api.route("/me/generate_auth_token", methods=['GET'])
+    @api.route("/suppression-de-compte", methods=['POST'])
     @login_required
-    def generate_auth_token():
-        user = current_user
-        return jsonify({'user': user.as_dict(),
-                        'token': user.get_auth_token(),
-                        })
+    def delete_account():
+        """ Suppression du compte après validation du formulaire """
+        email = current_user.email
+        Users.delete_one(current_user.uuid)
+        logout_user()
+        return render_template('account-deletion.xhtml', step="account-deleted", email=email)
+
     return api

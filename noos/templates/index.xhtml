@@ -37,7 +37,11 @@
                 <a href="{{ url_for('auth.create_account') }}" class="item">Créer un compte</a>
                 <a href="{{ url_for('auth.password_recovery') }}" class="item">Mot de passe perdu</a>
                 {%endif%}
-                {% if current_user.is_authenticated%}<a href="{{ url_for('auth.logout') }}" class="item">Déconnecter</a>{%endif%}
+
+                {% if current_user.is_authenticated%}
+                    <a href="{{ url_for('auth.logout') }}" class="item">Déconnecter</a>
+                    <a href="{{ url_for('auth.delete_account_form') }}" class="item">Supprimer le compte</a>
+                {%endif%}
             </div>
         </div>
     </div>

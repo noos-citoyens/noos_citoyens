@@ -1,0 +1,35 @@
+{% extends "index.xhtml" %}
+
+{% block mainzone %}
+
+
+<div class="ui form warning">
+    <div class="ui large message">
+
+      {% if  step == "delete-account" %}
+      <div class="header">Suppression du compte</div>
+      <p>
+          Vous souhaitez supprimer votre compte sur  NOos-citoyens.
+      </p>
+
+      <form action="{{url_for('auth.delete_account')}}" method="POST" class="ui form ">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+        <div class="field">
+            <button type="submit" class="ui orange button">Confirmer la suppression du compte</button>
+          </div>
+      </form>
+      {% endif %}
+
+
+      {% if  step == "account-deleted" %}
+      <div class="header">Le compte associé à l'adresse {{email}} a été supprimé</div>
+      {% endif %}
+
+      <div class="ui hidden divider"></div>
+     </div>
+</div>
+
+{% endblock %}
+
+{% block script %}
+{% endblock %}

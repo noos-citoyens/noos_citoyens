@@ -58,11 +58,6 @@ def init_db_command():
 def init_users():
     click.echo("adding 'noos' user")
     init_user_db()
-    uid = Users.add_user("ynnk@noos", 'nnk', 'secure', active=True)
-    uid = Users.add_user("2@noos", 'k', 'secure', active=False)
-    uid = Users.add_user("who@noos", 'noos', 'secure', active=True)
-    Users.activate("2@noos")
-    assert (uid is not None)
 
 
 @click.command('db-stats')
@@ -78,8 +73,6 @@ def db_stats():
 
     for r in rows:
         print(r)
-
-    print(Users.get_by_email('ynnk@noos'))
 
 
 
@@ -148,6 +141,7 @@ get_user_by_username_SQL = "SELECT uuid, email, pseudo, password, active, creati
 activate_user_SQL = "UPDATE user SET active=1 WHERE email=?"
 change_user_password_SQL = "UPDATE user set password=? WHERE email=?"
 count_users_SQL = "SELECT COUNT(email) FROM user"
+delete_user_SQL = "DELETE FROM user where uuid=?"
 
 
 class Users(object):
@@ -249,8 +243,21 @@ class Users(object):
         r = cursor.rowcount
         db.commit()
         cursor.close()
-       
+
         return True
+
+    @staticmethod
+    def delete_one(uuid):
+        db = get_db()
+        cursor = db.cursor()
+        cursor.execute(delete_user_SQL, (uuid,))
+        r = cursor.rowcount
+        db.commit()
+        cursor.close()
+
+        return True
+
+
 
     @staticmethod
     def change_password(email, password):

@@ -100,8 +100,8 @@ def create_app(test_config=None):
                     params['error_title'] = "C'est une erreur."
                     params['error_message'] = "There is something wrong. %s " % message
 
-                if code == 401 and load_from_cookie:
-                    return redirect('/')
+                if code == 401:
+                    return redirect(url_for('index'))
                 else:
                     return render_template('40x.xhtml', **params), code
 
@@ -200,4 +200,5 @@ def create_app(test_config=None):
     @app.route('/guide')
     def guide():
         return render_template('guidelines.xhtml', title="Conseils de rédaction")
+
     return app
