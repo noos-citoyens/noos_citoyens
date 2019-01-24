@@ -25,6 +25,14 @@ class Proposition(Document):
     uid = Keyword()
     date = Date()
 
+    def __str__(self):
+        return """
+        ---
+        {}
+        {}
+        {}
+        --- 
+        """.format(self.uid, self.cause, self.content)
 
     @staticmethod
     def simple_search(query, start, limit):
@@ -33,9 +41,16 @@ class Proposition(Document):
         results = s.execute()
         return {"count":count, "hits": results.hits}
 
+    @staticmethod
+    def dump_propositions():
+        s = Proposition.search()[0:2000]
+        for d in s.execute():
+            yield d
 
     class Index:
         name = INDEX_NAME
+
+
 def init_app(app):
 
     app.teardown_appcontext(user_db.close_db)
@@ -44,9 +59,12 @@ def init_app(app):
     app.cli.add_command(populate_es)
     app.cli.add_command(clean_es)
     app.cli.add_command(test_query)
+    app.cli.add_command(get_all_propositions)
+
     app.cli.add_command(user_db.init_db_command)
     app.cli.add_command(user_db.init_users)
     app.cli.add_command(user_db.db_stats)
+
 
 
 @click.command('init-es')
@@ -103,6 +121,14 @@ def test_query(query):
     for p in s.scan():
         click.echo(p.content)
 
+@click.command('get-all-propositions')
+@click.option('--output')
+@with_appcontext
+def get_all_propositions(output):
+    import json
+    data = [p.to_dict() for p in Proposition.dump_propositions()]
+    with open(output,"w") as f:
+        json.dump(data,f, default=lambda x: x.isoformat()) #  default=dangerous hack to serialize datetime objects
 
 
 
