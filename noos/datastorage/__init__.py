@@ -35,11 +35,11 @@ class Proposition(Document):
         """.format(self.uid, self.cause, self.content)
 
     @staticmethod
-    def simple_search(query, limit):
-        s = Proposition.search()[0:limit].query("match", content=query)
+    def simple_search(query, start, limit):
+        s = Proposition.search()[start:start+limit].query("match", content=query)
         count = s.count()
         results = s.execute()
-        return {"count": count, "hits": results.hits}
+        return {"count":count, "hits": results.hits}
 
     @staticmethod
     def dump_propositions():
