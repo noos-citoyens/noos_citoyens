@@ -5,6 +5,8 @@ import html
 from flask import Flask, render_template, request, jsonify, g, redirect, url_for, flash, abort, current_app
 from flask_login import LoginManager, current_user, login_required
 
+from flask_cors import CORS
+
 from .datastorage.user_db import Users, User
 
 
@@ -43,6 +45,7 @@ def create_app(test_config=None):
         os.makedirs(app.instance_path)
     except OSError:
         pass
+    cors = CORS(app, resources={r"/lookup_propositions": {"origins": "*"}})
 
     login_manager = LoginManager()
     login_manager.init_app(app)
@@ -149,6 +152,22 @@ def create_app(test_config=None):
             return jsonify({"count":results['count'], "hits":data})
         else:
             return jsonify([])
+
+
+    # pour TinaWebJS
+    # info_div.php?ndtype=0&dbtype=csv&query=["gestion","autoroutes","partie"]&gexf=data/p/graph.gexf&n=10
+    @app.route('/lookup_propositions', methods=['GET', "OPTIONS"])
+    def graph_query():
+        if request.method == "OPTIONS":
+            return app.make_default_options_response()
+        import json
+        query = json.loads(request.args.get("query"))
+        result = []
+        if query:
+            props = datastorage.Proposition.simple_search(" ".join(query),0,50)
+            result = [{'src':p['cause'], 'txt':p['content']} for p in props['hits']]
+        return jsonify({'hits':result})
+    #app.add_url_rule('/lookup_propositions', graph_query, methods=["GET"], provide_automatic_options=True)
 
     @app.route('/newprop', methods=['GET','POST'])
     @login_required

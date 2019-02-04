@@ -41,6 +41,7 @@ class Proposition(Document):
         results = s.execute()
         return {"count":count, "hits": results.hits}
 
+
     @staticmethod
     def dump_propositions():
         s = Proposition.search()[0:10000]
