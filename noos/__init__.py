@@ -120,6 +120,14 @@ def create_app(test_config=None):
         data = {'a':1, 'b': 2}
         return render_template('index.xhtml', title="Noos - plateforme de revendications citoyennes", data=data)
 
+    @app.route('/mentionslegales')
+    def legal():
+        return render_template('mentionslegales.xhtml', title="NOos - Mentions légales")
+
+    @app.route('/donnees')
+    def donnees():
+        return render_template('donnees.xhtml', title="NOos - Gestion des données")
+
     @app.route('/test')
     def test_page():
         return render_template('test.xhtml', title='page de test')

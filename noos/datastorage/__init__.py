@@ -43,7 +43,7 @@ class Proposition(Document):
 
     @staticmethod
     def dump_propositions():
-        s = Proposition.search()[0:2000]
+        s = Proposition.search()[0:10000]
         for d in s.execute():
             yield d
 
@@ -129,6 +129,7 @@ def get_all_propositions(output):
     data = [p.to_dict() for p in Proposition.dump_propositions()]
     with open(output,"w") as f:
         json.dump(data,f, default=lambda x: x.isoformat()) #  default=dangerous hack to serialize datetime objects
+
 
 
 
