@@ -27,7 +27,7 @@
         {% else %}
             <a href="#" class="disabled item">Proposer</a>
             <a href="#" class="disabled item">Voter</a>
-            <a href="{{ url_for('isc') }}" class="item">Explorer</a>
+            <a href="{{ url_for('isc') }}" class="item" target="_blank">Explorer</a>
         {%endif%}
          <div class="ui simple dropdown right item">
             <b>{% if not current_user.is_authenticated%}compte{%endif%} {{current_user.username}} </b><i class="dropdown icon"></i>
