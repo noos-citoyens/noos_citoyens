@@ -230,4 +230,8 @@ def create_app(test_config=None):
     def isc():
         return render_template('isc-explorer.xhtml', title="vision d'ensemble des propositions")
 
+    @app.route('/isc-frame')
+    def isc_frame():
+        return render_template('isc-frame.xhtml', title="vision d'ensemble des propositions")
+
     return app
