@@ -1,0 +1,15 @@
+{
+  "noos.gexf": {
+    "node0": {
+      "name": "term",
+      "reldbs": {
+        "csv": {
+          "file": "corpus.csv",
+          "qcols":  ["title","abstract"],
+          "template": "bib_details"
+        }
+      }
+    }
+  }
+
+}

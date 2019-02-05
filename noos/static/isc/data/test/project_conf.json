@@ -1,0 +1,26 @@
+{
+  "mini.gexf": {
+    "node0": {
+      "name": "term",
+      "reldbs": {
+        "csv": {
+          "file": "mini.csv",
+          "qcols": ["title","keywords","text"],
+          "template": "bib_details"
+        },
+        "twitter": {}
+      }
+    },
+    "node1": {
+      "name": "person",
+      "reldbs": {
+        "csv": {
+          "file": "mini.csv",
+          "qcols": ["author"],
+          "template": "bib_details"
+        }
+      }
+    }
+  },
+  "miserables.gexf": { }
+}

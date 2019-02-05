@@ -228,4 +228,8 @@ def create_app(test_config=None):
     def guide():
         return render_template('guidelines.xhtml', title="Conseils de rédaction")
 
+    @app.route('/isc-explorer')
+    def isc():
+        return render_template('isc-explorer.xhtml', title="vision d'ensemble des propositions")
+
     return app
