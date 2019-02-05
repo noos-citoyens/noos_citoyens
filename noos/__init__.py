@@ -5,8 +5,6 @@ import html
 from flask import Flask, render_template, request, jsonify, g, redirect, url_for, flash, abort, current_app
 from flask_login import LoginManager, current_user, login_required
 
-from flask_cors import CORS
-
 from .datastorage.user_db import Users, User
 
 
@@ -45,7 +43,7 @@ def create_app(test_config=None):
         os.makedirs(app.instance_path)
     except OSError:
         pass
-    cors = CORS(app, resources={r"/lookup_propositions": {"origins": "*"}})
+
 
     login_manager = LoginManager()
     login_manager.init_app(app)
