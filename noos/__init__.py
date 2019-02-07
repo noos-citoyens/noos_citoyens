@@ -45,6 +45,7 @@ def create_app(test_config=None):
     except OSError:
         pass
 
+
     login_manager = LoginManager()
     login_manager.init_app(app)
 
@@ -121,6 +122,14 @@ def create_app(test_config=None):
         data = {'a':1, 'b': 2}
         return render_template('index.xhtml', title="Noos - plateforme de revendications citoyennes", data=data)
 
+    @app.route('/mentionslegales')
+    def legal():
+        return render_template('mentionslegales.xhtml', title="NOos - Mentions légales")
+
+    @app.route('/donnees')
+    def donnees():
+        return render_template('donnees.xhtml', title="NOos - Gestion des données")
+
     @app.route('/test')
     def test_page():
         return render_template('test.xhtml', title='page de test')
@@ -142,6 +151,22 @@ def create_app(test_config=None):
             return jsonify({"count":results['count'], "hits":data})
         else:
             return jsonify([])
+
+
+    # pour TinaWebJS
+    # info_div.php?ndtype=0&dbtype=csv&query=["gestion","autoroutes","partie"]&gexf=data/p/graph.gexf&n=10
+    @app.route('/lookup_propositions', methods=['GET', "OPTIONS"])
+    def graph_query():
+        if request.method == "OPTIONS":
+            return app.make_default_options_response()
+        import json
+        query = json.loads(request.args.get("query"))
+        result = []
+        if query:
+            props = datastorage.Proposition.simple_search(" ".join(query),0,50)
+            result = [{'src':p['cause'], 'txt':p['content']} for p in props['hits']]
+        return jsonify({'hits':result})
+    #app.add_url_rule('/lookup_propositions', graph_query, methods=["GET"], provide_automatic_options=True)
 
     @app.route('/newprop', methods=['GET','POST'])
     @login_required
@@ -201,5 +226,13 @@ def create_app(test_config=None):
     @app.route('/guide')
     def guide():
         return render_template('guidelines.xhtml', title="Conseils de rédaction")
+
+    @app.route('/isc-explorer')
+    def isc():
+        return render_template('isc-explorer.xhtml', title="vision d'ensemble des propositions")
+
+    @app.route('/isc-frame')
+    def isc_frame():
+        return render_template('isc-frame.xhtml', title="vision d'ensemble des propositions")
 
     return app

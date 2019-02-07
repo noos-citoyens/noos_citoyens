@@ -1,0 +1,836 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="language" content='EN'>
+  <meta name="language" content='FR'>
+  <meta name="keywords"  content="dataviz, graph, data exploration, sigmajs, tinawebjs, projectExplorer">
+  <meta name="copyright" content="ISCPIF - UPS 3611 CNRS - 2017">
+  <meta name="revised"   content="2017-04-01/rloth">
+  <meta name="viewport"  content="width=device-width, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <!--   ========================     -->
+  <title>Propositions sur NOos-citoyens</title>
+  <!--   ========================     -->
+
+  <!-- Fonts -->
+
+  <!-- Ubuntu Condensed
+       Widely available font (possibly available without this cdn request, actually).
+       Also condensed is good for labels in crowded graphs
+  -->
+  <!-- <link href="https://fonts.googleapis.com/css?family=Ubuntu+Condensed" rel="stylesheet" type='text/css'> -->
+
+  <!-- Droid Sans -->
+  <link href="https://fonts.googleapis.com/css?family=Droid+Sans" rel="stylesheet">
+
+   <!-- Roboto
+        Good for tweets if Helvetica is not present
+   -->
+  <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type='text/css'>
+
+  <!-- Crete Round
+       Original *and* informative :) -->
+  <link href='https://fonts.googleapis.com/css?family=Crete+Round:400,400italic&subset=latin-ext' rel='stylesheet' type='text/css'>
+
+  <!-- Lora
+      "book" (roman style) + nice heading -->
+  <!-- <link href="https://fonts.googleapis.com/css?family=Lora:700" rel="stylesheet" type='text/css'> -->
+
+  <!-- Aref Ruqaa
+       "book" (light ornamental) + arabic support -->
+  <!-- <link href="https://fonts.googleapis.com/css?family=Aref+Ruqaa" rel="stylesheet" type='text/css'> -->
+
+  <!-- Sahitya & Gurajada
+       "book" (beautiful quality roman) + devanagari support + telugu -->
+  <link href="https://fonts.googleapis.com/css?family=Gurajada" rel="stylesheet">
+  <!-- <link href="https://fonts.googleapis.com/css?family=Sahitya" rel="stylesheet"> -->
+
+  <!-- Itim
+       cursive (refined and very readable but a bit too wide for us) + thai support -->
+  <!-- <link href="https://fonts.googleapis.com/css?family=Itim" rel="stylesheet" type='text/css'> -->
+
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="static/isc/twlibs3/jquery-3/jquery-ui-1.12.1/jquery-ui.min.css" media="screen">
+  <!-- NB bootstrap 3 not used for main grid (graph + bars) but inside the bars -->
+  <link rel="stylesheet" href="static/isc/twlibs3/bootstrap-3/css/bootstrap.min.css" media="screen">
+  <link rel="stylesheet" href="static/isc/twlibs3/freshslider/freshslider.css" media="screen">
+  <link rel="stylesheet" href="static/isc/twlibs3/tweets/tweet.light.excerpt.css" />
+  <link rel="stylesheet" href="static/isc/twlibs3/tweets/custom.css"/>
+
+  <link rel="stylesheet" href="static/isc/twlibs/css/twjs.css">
+  <link rel="stylesheet" href="static/isc/twlibs/css/twjs-mobile.css">
+  <link rel="stylesheet" href="static/isc/twlibs/css/selection-panels.css">
+  <link rel="stylesheet" href="static/isc/twlibs/css/selection-panels-mobile.css">
+  <link rel="stylesheet" href="static/isc/twlibs/css/user_form.css" />
+
+  <link rel="shortcut icon" href="static/isc/twlibs/img/favicon.ico" type="image/x-icon" />
+
+  <!-- JS -->
+  <!-- <script src="script.js"></script> -->
+</head>
+
+
+<body>
+  <!-- ex-defaultop -->
+  <div id="toolbar" class="navbar navbar-default" style="top: 0px;">
+    <div id="defaultop" class="container-fluid">
+
+      <div class="navbar-header">
+        <button id="toolbar-open" type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#left" aria-expanded="false" aria-controls="navbar">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+      </div>
+
+        <div id="left" class="navbar-collapse collapse">
+
+          <ul class="nav navbar-nav navbar">
+
+            <!--
+            <li>
+               <a>
+                <select id="aselector" onchange="console.log('salut monde')" class="selectpicker"  data-style="btn btn-success btn-sm"  data-width="auto">
+                  <option value="Scholars" selected>Scholars</option>
+                  <option value="Keywords">Keywords</option>
+                </select>
+               </a>
+            </li>
+            -->
+
+            <li>
+               <a>
+                <button type="button" id="changetype" class="btn btn-success btn-sm">Change<br>Type</button>
+               </a>
+            </li>
+
+            <li>
+               <a>
+                <button type="button" id="changelevel" class="btn btn-primary btn-sm" title="sélectionnez des sommets pour changer de niveau" disabled>Change<br>Level</button>
+               </a>
+            </li>
+
+            <!-- <li>
+               <a>
+                <button type="button" id="doTest" class="btn btn-sm">Run Test</button>
+               </a>
+            </li> -->
+
+            <li id="areacircle-size"><a>
+              Selector size<br>
+              <div id="unranged-value" class="settingslider"></div>
+            </a></li>
+
+            <li class="tworow-selectors">
+              <!-- Adjust the node sizes per nodetype-->
+              <table>
+                <tr class="for-nodecategory-0">
+                  <td class="slider-legend">
+                    Label Size
+                  </td>
+                  <td id="sliderlabelsize0" class="settingslider">
+                  </td>
+                </tr>
+                <tr class="for-nodecategory-1">
+                  <td class="slider-legend">
+                    Label Size
+                  </td>
+                  <td id="sliderlabelsize1" class="settingslider">
+                  </td>
+                </tr>
+              </table>
+            </li>
+
+
+             <li id="setcolorsMenu" class="dropdown">
+               <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+               Set Colors <img title="Set Colors" src="static/isc/twlibs/img/colors.png" width="20px"><span class="caret"></span>
+               </a>
+                <ul id="colorgraph-menu" class="dropdown-menu">
+                </ul>
+             </a></li>
+
+             <li>
+                 <a href="#tune-settings-panel" id="tune-button" class="button"
+                    title="Tune settings"
+                    data-toggle="modal" data-target="#tune-settings-panel">
+                   <span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
+                 </a>
+             </li>
+
+            <li class="tworow-selectors for-nodecategory-0">
+              <!-- Create a subgraph over nodes from TW.categories[0] (terms or def nodes)-->
+              <table>
+                <tr>
+                  <td class="slider-legend">
+                    Nodes
+                  </td>
+                  <td id="slidercat0nodesweight" class="settingslider">
+                  </td>
+                </tr>
+                <tr>
+                  <td class="slider-legend">
+                    Edges
+                  </td>
+                  <td id="slidercat0edgesweight" class="settingslider">
+                  </td>
+                </tr>
+              </table>
+            </li>
+            <li class="tworow-selectors for-nodecategory-1">
+              <!-- Create a subgraph over nodes from TW.categories[1] (docs or people)-->
+              <table>
+                <tr class="weight-selector">
+                  <td class="slider-legend">
+                    Nodes
+                  </td>
+                  <td id="slidercat1nodesweight" class="settingslider">
+                  </td>
+                </tr>
+                <tr class="weight-selector">
+                  <td class="slider-legend">
+                    Edges
+                  </td>
+                  <td id="slidercat1edgesweight" class="settingslider">
+                  </td>
+                </tr>
+              </table>
+            </li>
+
+          </ul>
+
+          <ul id="searchnav" class='nav navbar-nav navbar-left'>
+            <li class="navbar-lower">
+              <div id="search_input_group" class="input-group input-group-sm my-nav-input-group">
+                <span class="input-group-btn crowdsourcingModule">
+                  <button id="savesuggestion"
+                          disabled
+                          title="Save this topic as a new suggestion"
+                          class="btn btn-default"
+                          type="button">
+                    <span class="glyphicon glyphicon-save"
+                           id="saveicon">
+                    </span>
+                  </button>
+                </span>
+
+                <span class="input-group-btn">
+                  <button id="searchbutton"
+                          title="Search the topic in the map"
+                          class="btn btn-primary"
+                          type="button">
+                    <span class="glyphicon glyphicon-search">
+                    </span>
+                  </button>
+                </span>
+
+                <!-- ########## THE SEARCH BAR ########## -->
+
+                <input id="searchinput"
+                        type="text"
+                        class="form-control"
+                        placeholder="Select node(s)" />
+
+                <!-- strSearchBar will replace placeholder value -->
+
+                <!-- #################################### -->
+
+              </div>
+            </li>
+
+            <!-- messages below the search bar -->
+            <!-- say thanks for the suggestion, etc. -->
+            <li id="crowdsourcing_answer" class="nav crowdsourcingModule navbar-lower"></li>
+
+            <!-- checkbox -->
+            <li class="navbar-lower">
+              <input id="checkboxdiv" onclick="alertCheckBox(this);"
+                    title="Add next search results to current selection"
+                    class="nav btn btn-info"
+                    type="checkbox">
+              <span style="position: relative; top: 4px;">Add to selection</span>
+            </li>
+
+          </ul>
+
+
+        </div><!-- /div#left -->
+
+
+    </div>  <!-- /#defaultop -->
+  </div> <!-- /toolbar -->
+
+
+  </div>
+  <div id="sigma-contnr">
+    <div id="graph-panels">
+
+      <ul id="ctlzoom">
+
+              <!--
+               <li>
+                  <a href="#" id="geomapicon" onclick="$('#geomapmodal').modal('show'); callGeomapADEME();">
+                    <img title="World Map Distribution" width="34px" src="static/isc/twlibs/img/world.png"></img>
+                  </a>
+              </li>
+              -->
+
+
+               <li>
+                  <a href="#" id="snapicon" onclick="saveGraphIMG();" class="zoombarbuttons">
+                    <img title="Take a photo!" style="width:30px" src="static/isc/twlibs/img/camera.png"></img>
+                  </a>
+              </li>
+
+              <li>
+                  <a href="#savemodal" id="saveAs" class="zoombarbuttons" data-toggle="modal" data-target="#savemodal">
+                    <img style="width:28px" title="Save As..." src="static/isc/twlibs/img/save.png"></img>
+                  </a>
+              </li>
+
+              <li>
+                  <a href="#" id="zoomPlusButton" title="Zoom In"> </a>
+              </li>
+
+              <li id="zoomSliderzone">
+                  <div id="zoomSlider"></div>
+              </li>
+
+              <li>
+                  <a href="#" id="zoomMinusButton" title="Zoom Out"> </a>
+              </li>
+
+
+              <li>
+                  <a href="#" id="lensButton" class="zoombarbuttons"
+                     title="Center View">
+                    <img src="static/isc/twlibs/img/target.png">
+                  </a>
+              </li>
+
+              <li>
+                  <a href="#" id="layoutButton" class="zoombarbuttons"
+                     title="Force Atlas Layout">
+                    <img src="static/isc/twlibs/img/edges.png">
+                  </a>
+              </li>
+
+              <li>
+                  <a href="#" id="noverlapButton" class="zoombarbuttons"
+                     title="Disperse Overlapping Nodes">
+                    <img src="static/isc/twlibs/img/disperse.png">
+                  </a>
+              </li>
+
+
+              <li>
+                  <a href="#facet-options" id="facets" class="zoombarbuttons"
+                     title="Facets coloring options"
+                     data-toggle="modal" data-target="#facet-options">
+                    <img src="static/isc/twlibs/img/facet_options.png"></img>
+                  </a>
+              </li>
+
+              <li>
+                <div class="onoffswitch">
+                  <input type="checkbox" name="edges-switch" class="onoffswitch-checkbox" id="edges-switch" checked>
+                  <label class="onoffswitch-label" for="edges-switch">
+                    <span id="edges-switch-inner-label" class="onoffswitch-inner"></span>
+                    <span class="onoffswitch-switch"></span>
+                  </label>
+                </div>
+              </li>
+
+      </ul>
+
+      <!-- inline *after* sigma-contnr for better overlay positioning -->
+      <!-- Sidebar top left -->
+      <div id="lefttopbox">
+
+        <!-- selected nodes -->
+        <div id="tw-current-selection">
+            <button id="unselectbutton" class="btn-xs"
+                onclick='cancelSelection(false);'
+                title="Unselect these terms">
+              <span class="glyphicon glyphicon-remove" alt="X"></span>
+            </button>
+            <div id="names"></div>
+        </div>
+
+        <!-- histogram of selected nodes -->
+        <div class="histogramModule">
+          <!-- filled by query (user search value) to wos api -->
+          <div id="search_histogram" class="over-panels"></div>
+        </div><!-- /row -->
+
+        <!-- histogram of selected nodes, variant ; TODO unify -->
+        <div class="histogramDailyVariantModule">
+          <!-- filled by query (user search value) to wos api -->
+          <div id="search_histogram2" class="over-panels"></div>
+        </div><!-- /row -->
+      </div>
+
+      <!-- attributes' legends (absolute position bottom left)
+           (contains one div of class "my-legend" per colored nodetype) -->
+      <div id="legend-for-facets" class="over-panels"></div>
+
+      <!-- to reopen the panel -->
+      <div id="sideunfold">
+        <img title="Open sidepanel" src="static/isc/twlibs/img/unfold2.png"></img>
+      </div>
+
+    </div>
+  </div>
+  <div id="sidebar">
+    <!-- manual file chooser if run locally -->
+    <div id="localInput"></div>
+
+    <div id="selection-tabs-contnr" class='selection-tabs-contnr'>
+
+       <!-- selection's neighbors display -->
+       <ul class='etabs nav nav-tabs'>
+         <!-- for related elements from the combined graph (eg soc => sem) -->
+         <li id="taboppos" class='tab'>
+           <a href="#tagcloud-XR">Opposite-Neighbors</a>
+         </li>
+         <!-- for neighbors within this graph -->
+         <li id="tabsameside" class='tab'>
+           <a href="#tagcloud-00">Related</a>
+         </li>
+       </ul>
+
+       <div class='panel-container'>
+         <!-- 2 tabs with outer div for tabbing, inner div for readmore (readmore needs its container to be never hidden)-->
+         <div id="tagcloud-XR">
+            <div id="read-opposite-neighs"></div>
+         </div>
+         <div id="tagcloud-00">
+            <div id="read-sameside-neighs"></div>
+         </div>
+       </div>
+    </div>
+
+    <!-- topPapers tabs -->
+    <div id="reldocs-tabs-wrapper" class="reldocs">
+
+      <!-- NB:  data-reldocstype should match TW.conf.relatedDocsType
+                and will be filled from TW.conf.relatedDocsAPIS keys
+          -->
+      <ul id="reldocs-tabs" class="nav nav-tabs" role="tablist">
+
+      </ul>
+
+      <!-- One tab pane
+           (only one with topPapers, we change content ourselves)
+         -->
+      <div id="reldocs-boxes" class="tab-content">
+        <!--
+          exemple:
+
+          <div id="rd-0-csv" role="tabpanel" class="topPapers tab-pane active">
+          </div>
+        -->
+      </div>
+
+    </div>
+
+    <div id="information"></div>
+
+    <!--
+      bottom right column as panels
+
+      open/close panel from: jsfiddle.net/KyleMit/kcpma
+    -->
+    <div class="panel-group" id="varinfos-accordion">
+
+      <div class="panel panel-default" id="video_explanation">
+        <div class="panel-heading">
+          <h4 class="panel-title">
+            <a data-toggle="collapse" data-target="#le_tutorial" href="#le_tutorial"
+               data-parent="#varinfos-accordion">
+              <span class="glyphicon glyphicon-eye-open" aria-hidden="true"></span>
+              &nbsp;Tutorial video
+            </a>
+          </h4>
+        </div>
+
+        <div class="panel-collapse collapse" id="le_tutorial">
+          <iframe id='twbrand-video' src="" width="100%" height="201" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
+        </div>
+      </div>
+
+      <div class="panel panel-default" id="tips_panel">
+        <div class="panel-heading">
+          <h4 class="panel-title">
+            <a data-toggle="collapse" data-target="#tips" href="#tips"
+               data-parent="#varinfos-accordion">
+              <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+              &nbsp;Tips
+            </a>
+          </h4>
+        </div>
+
+        <div class="panel-collapse collapse in" id="tips">
+          <p>here tips inserted by twmain/Tinaweb.js</p>
+        </div>
+      </div>
+
+      <div class="panel panel-default" id="stats-panel">
+        <div class="panel-heading">
+          <h4 class="panel-title">
+            <a data-toggle="collapse" data-target="#stats" href="#stats"
+               data-parent="#varinfos-accordion">
+              <span class="glyphicon glyphicon-list" aria-hidden="true"></span>
+              &nbsp;Stats
+            </a>
+          </h4>
+        </div>
+
+        <div class="panel-collapse collapse in" id="stats">
+          <p>here stats inserted by twmain/Tinaweb.js</p>
+        </div>
+      </div>
+
+      <div class="panel panel-default" id="video_explanationw">
+        <div class="panel-heading">
+          <h4 class="panel-title">
+            <a data-toggle="collapse" data-target="#credits" href="#credits"
+               data-parent="#varinfos-accordion">
+              <span class="glyphicon glyphicon-flag" aria-hidden="true"></span>
+              &nbsp;Credits
+            </a>
+          </h4>
+        </div>
+
+        <div class="panel-collapse collapse" id="credits">
+          <p>
+            <a href="https://bigdata.iscpif.fr/" target="_blank">
+                <img src="https://bigdata.iscpif.fr/images/logos/BIGDATA-Logo-PoweredBy-light.jpg"
+                alt="Powered by Big Data at ISCPIF"
+                style="width:85%; ">
+            </a>
+            <a href="https://github.com/moma" target="_blank">
+                <img src="static/isc/twlibs/img/moma.png"
+                alt="Sciencemapping"
+                style="width:85%; ">
+            </a>
+          </p>
+        </div>
+      </div>
+
+    </div>
+
+    <br><br>
+    <div id="sidefold">
+      <img title="Close sidepanel" src="static/isc/twlibs/img/fold2.png"></img>
+    </div>
+  </div>
+  <div id="hidden-elements">
+    <div id="savemodal" class="modal fade">
+      <div class="modal-dialog">
+        <div class="modal-content">
+
+
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h4 class="modal-title">Exporting GEXF file</h4>
+          </div>
+
+          <div class="modal-body form-horizontal">
+            What do you want to save?:
+            <div class="form-group">
+              <label class="col-lg-2 control-label"> </label>
+              <div class="col-lg-10">
+                <div class="radio">
+                  <label>
+                    <input type="radio" name="optionsRadios" id="fullgraph" value="option1" checked="true">
+                    Full Graph
+                  </label>
+                </div>
+                <div class="radio">
+                  <label>
+                    <input type="radio" name="optionsRadios" id="visgraph" value="option2">
+                    Visible Graph
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="modal-body form-horizontal">
+            <p>Which attributes do you want to keep ?</p>
+            <div class="form-group">
+              <label class="col-lg-2 control-label"> </label>
+              <div class="col-lg-10">
+                <div class="checkbox">
+                  <label>
+                    <input type="checkbox" id="check_viz_attrs" checked>
+                    Size, Position and Color
+                  </label>
+                </div>
+                <div class="checkbox">
+                  <label>
+                    <input type="checkbox" id="check_data_attrs" checked>
+                    Data attributes <span id="data_attrs_exemples" class="micromessage"></span>
+                  </label>
+                </div>
+              </div>
+            </div>
+            <p class=micromessage>NB: the 'type' of nodes is always saved</p>
+          </div>
+
+          <div class="modal-footer">
+            <button id="closesavemodal" type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" onclick="saveGraph();">Save File</button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+
+    <div id="tune-settings-panel" class="modal fade">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h4 class="modal-title">Tune settings</h4>
+          </div>
+          <div class="modal-body">
+            <div class="uform-white">
+              <form id="dev_testing-form">
+                 <h3 class="formcat">Palette de couleurs</h3><br/>
+
+                   <div class="question">
+                     <div class="input-group">
+                       <label for="color-palette" class="smlabel input-group-addon">Colors for clusters</label>
+                       <select id="color-palette" name="color-palette" class="custom-select form-control">
+                         <option value="9CBrewerSet1">9CBrewerSet1</option>
+                         <option value="12CBrewerPaired">12CBrewerPaired</option>
+                         <option value="22Kelly">22Kelly</option>
+                         <option selected value="24DivergingZeileis">24DivergingZeileis</option>
+                         <option value="24ContrastedPastel">24ContrastedPastel</option>
+                         <option value="50Fluo">50Fluo</option>
+                         <option value="50Pastel">50Pastel</option>
+                         <option value="80Pastel">80Pastel</option>
+                         <option value="128Tina">128Tina</option>
+                       </select>
+                     </div>
+                   </div>
+
+                 <h3 class="formcat">Réglages de spatialisation</h3><br/>
+
+                   <div class="question">
+                     <div class="input-group">
+                       <label for="layout-scenario" class="smlabel input-group-addon">Scenarios</label>
+                       <select id="layout-scenario" name="layout-scenario" class="custom-select form-control">
+                          <option selected value="indeptypes">Spatialisation distincte par types, stable par filtres</option>
+                          <option value="indeptypes-adaptspeed">Idem avec slowDown en meso</option>
+                          <option value="allstable">Spatialisation conjointe stable</option>
+                          <option value="notstable">Re-spatialisation à chaque vue ou filtre</option>
+                       </select>
+                     </div>
+                   </div>
+                   <div class="question">
+                     <div class="input-group">
+                       <label for="match-alg" class="smlabel input-group-addon">Algo match</label>
+                       <select id="match-alg" name="match-alg" class="custom-select form-control">
+                          <option selected value="tradi">Jaccard via algo traditionnel</option>
+                          <option value="multi">Jaccard via algo multimatch</option>
+                       </select>
+                     </div>
+                   </div>
+              </form>
+
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-default" data-dismiss="modal">
+              Cancel
+            </button>
+            <button class="btn btn-primary"
+              type=button onclick="newSettingsAndRun()" data-dismiss="modal">
+              Run
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div id="facet-options" class="modal fade">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h4 class="modal-title">Facet options</h4>
+          </div>
+          <div class="modal-body">
+            <div class="uform-white">
+              <form id="facet_options_form" onsubmit="console.info('submitted')">
+                 <h3 class="formcat">Edit attribute:</h3><br/>
+
+                   <div class="question">
+                     <div class="input-group">
+                       <label for="choose-attr" class="smlabel input-group-addon">Attribute</label>
+                       <select id="choose-attr" name="choose-attr"
+                               class="custom-select form-control">
+                               <!-- filled by fillAttrsInForm(.) -->
+                       </select>
+                     </div>
+                   </div>
+
+                   <div class="question">
+                     <div class="input-group">
+                       <label for="attr-translation" class="smlabel input-group-addon">Legend</label>
+                       <input id="attr-translation" name="attr-translation" maxlength="70"
+                              type="text" class="form-control autocomp" placeholder="A label for this attribute"
+                              >
+                      </div>
+                      <p class="legend">Will be displayed in the color menu and legends box.</p>
+                   </div>
+
+
+                   <div class="question">
+                     <div class="input-group">
+                       <label for="attr-col" class="smlabel input-group-addon">Coloring function</label>
+                       <select id="attr-col" name="attr-col"
+                               class="custom-select form-control"
+                                onchange="colChangedHandler()">
+                           <option selected value="0"></option>
+                           <option value="cluster">cluster</option>
+                           <option value="gradient">gradient</option>
+                           <option value="heatmap">heatmap</option>
+                       </select>
+                     </div>
+                   </div>
+
+                   <div class="question">
+                     <div class="input-group">
+                       <label for="attr-binmode" class="smlabel input-group-addon">Binning Mode</label>
+                       <select id="attr-binmode" name="attr-binmode"
+                               class="custom-select form-control" onchange="conditiOpen('attr-nbins-div', 'attr-binmode',['samerange', 'samepop'])">
+                           <option selected value="0"></option>
+                           <option value="off">No binning</option>
+                           <option value="samerange">Same range between ticks</option>
+                           <option value="samepop">Same population in each bin</option>
+                       </select>
+                     </div>
+                   </div>
+
+                   <div class="question conditional-q" id="attr-nbins-div">
+                     <div class="input-group">
+                       <label for="attr-nbins" class="smlabel input-group-addon">Number of bins</label>
+                       <input id="attr-nbins" name="attr-nbins" maxlength="2"
+                              type="text" class="form-control autocomp" placeholder="number of bins"
+                              onchange="let castint = parseInt(this.value) ; if (castint != this.value || castint < 2) {this.value = 2} else if(castint > 24) {this.value = 24}"
+                              >
+                      </div>
+                      <p class="legend">Please input an integer value between 2 and 24.</p>
+                   </div>
+
+                    <!-- this titling functionality is like a head -n inside each class -->
+                    <div class="question conditional-q"  id="choose-titling-div">
+                      <p class="legend">Please choose a size/weight metric used to rank the "title-candidates" inside each cluster.</p>
+
+                      <div class="input-group">
+                        <label for="attr-titling-metric" class="smlabel input-group-addon">Titling metric</label>
+                        <select id="attr-titling-metric" name="attr-titling-metric"
+                                class="custom-select form-control">
+                                <option value="off">No titling (preserve original values)</option>
+                                <!-- other attrs filled by fillAttrsInForm(., 'num') -->
+                        </select>
+                      </div>
+                      <div class="input-group" style="margin-top:.5em;">
+                        <label for="attr-titling-n" class="smlabel input-group-addon">Number of terms</label>
+                        <input id="attr-titling-n" name="attr-titling-n" maxlength="2"
+                               type="text" class="form-control autocomp" placeholder="number of node labels to pick as title (1-10)"
+                               onchange="let castint = parseInt(this.value) ; if (castint != this.value || castint < 1) {this.value = 1} else if(castint > 10) {this.value = 10}"
+                               >
+                       </div>
+                    </div>
+
+              </form>
+
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button class="btn btn-default" data-dismiss="modal">
+              Cancel
+            </button>
+            <button class="btn btn-primary"
+              type=button onclick="newAttrConfAndColor()" data-dismiss="modal">
+              Ok
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+<!--
+    <div id="geomapmodal" class="modal fade">
+
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h4 class="modal-title">Geomap</h4>
+          </div>
+          <div class="modal-body">
+            <div class="geomapCont"></div>
+          </div>
+          <div id="closegeomap" data-dismiss="modal"></div>
+    </div> -->
+
+    <!-- <div id="heatgraph"></div> -->
+
+  </div>
+
+  <!--         SCRIPTS        -->
+  <script src="static/isc/twlibs3/jquery-3/jquery-3.2.0.min.js" type="text/javascript"></script>
+  <script src="static/isc/twlibs3/jquery-3/jquery-ui-1.12.1/jquery-ui.min.js" type="text/javascript"></script>
+  <script src="static/isc/twlibs3/jquery-3/jquery.easytabs.js" type="text/javascript"></script>
+  <script src="static/isc/twlibs3/freshslider/freshslider.1.0.js" type="text/javascript" ></script>
+  <script src="static/isc/twlibs3/readmore.js" type="text/javascript"></script>
+  <script src="static/isc/twlibs3/tweets/widgets.js" type="text/javascript" language="javascript"></script>
+  <script src="static/isc/twlibs3/bootstrap-native/bootstrap-native.js"></script>
+  <!-- new sigma 1.2 imports -->
+  <!-- <script src="static/isc/twlibs3/sigma_v1.2/sigma.min.js" type="text/javascript" language="javascript"></script> -->
+  <script src="static/isc/twlibs3/sigma_v1.2/sigma.noIndexes.js" type="text/javascript" language="javascript"></script>
+  <!-- <script src="static/isc/twlibs3/sigma_v1.2/sigma.js" type="text/javascript" language="javascript"></script> -->
+  <!--
+  NB: our sigma.noIndexes.js has exactly the same functions & varnames as
+      the v1.2 stock sigma.(min).js but with a much lighter RAM footprint!
+      cf. https://github.com/jacomyal/sigma.js/issues/340
+  -->
+  <script src="static/isc/twlibs3/sigma_v1.2/plugins/sigma.plugins.animate/sigma.plugins.animate.js"></script>
+  <script src="static/isc/twlibs3/sigma_v1.2/plugins/sigma.layout.noverlap/sigma.layout.noverlap.js"></script>
+  <script src="static/isc/twlibs3/sigma_v1.2/plugins/sigma.layout.forceAtlas2/supervisor.js"></script>
+  <script src="static/isc/twlibs3/sigma_v1.2/plugins/sigma.layout.forceAtlas2/worker.js"></script>
+  <script src="static/isc/twlibs3/sigma_v1.2/plugins/sigma.renderers.snapshot/sigma.renderers.snapshot.js"></script>
+  <script src="static/isc/twlibs3/sigma_v1.2/plugins/sigma.plugins.dragNodes/sigma.plugins.dragNodes.js"></script>
+  <script src="static/isc/twlibs3/sigma_v1.2/plugins/sigma.exporters.gexf/sigma.exporters.gexf.js"></script>
+
+
+
+  <script src="static/isc/twmain/globalUtils.js"></script>
+  <!-- new sigma (1.0c => 1.2) compatibility imports -->
+  <script src="static/isc/twmain/sigma_tools.js"></script>
+
+  <!-- classic tinawebJS imports -->
+  <script src="static/isc/settings_explorerjs.js"></script>
+  <script src="static/isc/twmain/jLouvain.js"></script>
+  <script src="static/isc/twmain/enviroment.js"></script>
+  <script src="static/isc/twmain/sigma.parseCustom.js"></script>
+  <script src="static/isc/twmain/sigmaUtils.js"></script>
+  <script src="static/isc/twmain/extras_explorerjs.js"></script>
+  <script src="static/isc/twmain/methods.js"></script>
+  <script src="static/isc/twmain/Tinaweb.js"></script>
+  <script src="static/isc/twmain/main.js"></script>
+  <!--        /SCRIPTS        -->
+</body>
+
+</html>
