@@ -10,7 +10,21 @@ from flask_mail import Message
 @click.option('--email-file')
 @with_appcontext
 def send_to_all_active(email_file):
+    """ email sender to all active users
+        :params  email_file: path to email file
 
+        email_file content is :
+        * first line subject
+        * blank line
+        * Body content
+        >
+            Subject
+
+            Body starts here
+            ...
+            ..
+            end
+    """
     try:
         em = open(email_file).read().split("\n")
         subject = em[0]
@@ -36,7 +50,7 @@ def send_to_all_active(email_file):
                 message.recipients = [to]
                 message.body = body
                 message.subject = subject
-                print("sending message to %s   (%s/%s)" % (to, i, len(users)))
+                print("sending message to %s   (%s/%s)" % (to, i+1, len(users)))
                 current_app.mail.send(message)
 
             except Exception as err:

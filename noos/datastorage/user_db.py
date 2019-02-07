@@ -56,8 +56,15 @@ def init_db_command():
 @click.command('init-users')
 @with_appcontext
 def init_users():
-    click.echo("adding 'noos' user")
     init_user_db()
+
+    users = (
+             ("noos@example.com", "noos", "secret", True),
+            )
+
+    for  a,u,p, active in users:
+        click.echo("adding '%s' user" % u)
+        User.create(a,u,p, active)
 
 
 @click.command('db-stats')
@@ -91,8 +98,8 @@ class User(object):
         self._verified = False
 
     @staticmethod
-    def create(email, pseudo, password):
-        return Users.add_user(uuid, email, pseudo, password, False)
+    def create(email, pseudo, password, active=False):
+        return Users.add_user( email, pseudo, password, active)
 
     def change_password(self, password):
         hash_password = generate_password_hash(password)
