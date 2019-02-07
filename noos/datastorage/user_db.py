@@ -133,7 +133,7 @@ class User(object):
                 'uuid' : self.uuid
                 }
 
-
+get_active_users_SQL = "SELECT uuid, email, pseudo, password, active, creation_time FROM user WHERE active=1"
 add_user_SQL = "INSERT INTO user(uuid, email, pseudo, password, active, creation_time ) VALUES (?,?,?,?,?, date('now'))"
 get_user_by_uuid_SQL = "SELECT uuid, email, pseudo, password, active, creation_time FROM user WHERE uuid=?"
 get_user_by_email_SQL = "SELECT uuid, email, pseudo, password, active, creation_time FROM user WHERE email=?"
@@ -153,6 +153,16 @@ class Users(object):
         cursor.execute(count_users_SQL)
         count = cursor.fetchone()[0]
         return count
+
+    def get_users():
+
+        db = get_db()
+        cursor = db.cursor()
+        cursor.execute(get_active_users_SQL)
+        users = cursor.fetchall()
+        cursor.close()
+
+        return users
 
     @staticmethod
     def add_user(email, username, password, active=False):

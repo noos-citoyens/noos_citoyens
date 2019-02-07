@@ -21,7 +21,6 @@
           </p>
           {% endif %}
 
-
           {% if  step == "validation-resent" %}
            <div class="header">Bonjour {{username}}</div>
            <p>On vient de vous écrire !</p>
@@ -30,24 +29,23 @@
            </p>
           {% endif %}
 
-
           {% if  step == "invitation-invalid" %}
           <div class="header">Your account can not be created.</div>
           <p>The invitation token is no longer valid.<br/> </p>
           <p>You can <a href="/">request a new invitation  </a><br/></p>
           {% endif %}
 
-
-          {% if  step == "token-invalid" %}
-           <div class="header">Votre compte ne peut être validé</div>
-           <p>Le lien n'est plus valide<br/>
-           {% if uuid %}
+          {% if  step == "token-expired" %}
+          <div class="header">Votre compte ne peut être validé</div>
+          <p>Le lien n'est plus valide<br/>
              <a  class="ui primary button" href="{{url_for('auth.resend_validation', uuid=uuid)}}">Demander un nouveau lien d'activation.</a></p>
-           {% else %}
-             <a  class="ui primary button" href="{{url_for('auth.login_form', uuid=uuid)}}">Connecter vous pour obtenir un nouveau lien d'activation.</a></p>
-           {% endif %}
           {% endif %}
 
+          {% if  step == "token-invalid" %}
+          <div class="header">Votre compte ne peut être validé</div>
+          <p>Le lien n'est plus valide<br/>
+             <a  class="ui primary button" href="{{url_for('auth.resend_validation', uuid=uuid)}}">Demander un nouveau lien d'activation.</a></p>
+          {% endif %}
 
           {% if  step == "cant-send-email" %}
           <div class="header">Your account can not be created.</div>
