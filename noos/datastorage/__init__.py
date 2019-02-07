@@ -7,6 +7,7 @@ from elasticsearch_dsl import Index, Document, Date, Integer, Keyword, Text, Ip,
 import elasticsearch_dsl as es
 from elasticsearch_dsl.connections import connections
 from .user_db import Users, init_user_db
+from . import noosletter
 
 connections.create_connection(hosts=['localhost'])
 INDEX_NAME="noos"
@@ -14,6 +15,23 @@ INDEX_NAME="noos"
 from uuid import uuid4
 def uuid():
     return uuid4().hex
+
+
+def init_app(app):
+
+    app.teardown_appcontext(user_db.close_db)
+
+    app.cli.add_command(init_es)
+    app.cli.add_command(populate_es)
+    app.cli.add_command(clean_es)
+    app.cli.add_command(test_query)
+    app.cli.add_command(get_all_propositions)
+
+    app.cli.add_command(user_db.init_db_command)
+    app.cli.add_command(user_db.init_users)
+    app.cli.add_command(user_db.db_stats)
+
+    app.cli.add_command(noosletter.send_to_all_active)
 
 
 class Proposition(Document):
@@ -51,20 +69,6 @@ class Proposition(Document):
     class Index:
         name = INDEX_NAME
 
-
-def init_app(app):
-
-    app.teardown_appcontext(user_db.close_db)
-
-    app.cli.add_command(init_es)
-    app.cli.add_command(populate_es)
-    app.cli.add_command(clean_es)
-    app.cli.add_command(test_query)
-    app.cli.add_command(get_all_propositions)
-
-    app.cli.add_command(user_db.init_db_command)
-    app.cli.add_command(user_db.init_users)
-    app.cli.add_command(user_db.db_stats)
 
 
 

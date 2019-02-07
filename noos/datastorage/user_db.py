@@ -154,7 +154,8 @@ class Users(object):
         count = cursor.fetchone()[0]
         return count
 
-    def get_users():
+    @staticmethod
+    def get_active_users():
 
         db = get_db()
         cursor = db.cursor()

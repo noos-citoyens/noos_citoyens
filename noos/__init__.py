@@ -6,7 +6,7 @@ from flask import Flask, render_template, request, jsonify, g, redirect, url_for
 from flask_login import LoginManager, current_user, login_required
 
 from .datastorage.user_db import Users, User
-import noosletter
+from .datastorage import noosletter
 
 
 
