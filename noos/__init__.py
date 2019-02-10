@@ -235,4 +235,8 @@ def create_app(test_config=None):
     def isc_frame():
         return render_template('isc-frame.xhtml', title="vision d'ensemble des propositions")
 
+    @app.route('/datasets')
+    def datasets():
+        return render_template("datasets.xhtml", title="Données Ouvertes")
+
     return app
