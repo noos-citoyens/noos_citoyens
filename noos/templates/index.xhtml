@@ -53,6 +53,18 @@
 {% block nomain %}
 <div class="ui main text container" style="margin-top: 7em;">
     {% block mainzone %}
+    <div class="ui green message">
+        <i class="close icon"></i>
+        <p>NOos-citoyens est un site qui a été mis en place indépendamment de tout parti et de toute liste constituée.
+        Il est ouvert à tous, la diversité des participations est essentielle pour donner un sens à nos efforts.
+        Les initiateurs de ce projet ont des profils très divers,
+        nous nous sommes regroupés autour de la volonté de proposer une solution ouverte (code libre et Open Data)
+        pour permettre une expression libre. Nous espérons pouvoir coopérer avec les autres initiatives et
+        avec quiconque souhaiterait participer à l’analyse de la parole citoyenne en suivant des principes
+        de rigueur scientifique et d’ouverture.</p>
+
+        <p>info: sur le site en .fr on utilise un unique (mais indispensable) cookie pour gérer la connexion à votre compte.</p>
+    </div>
     <h1 class="ui centered header">Noos-Citoyens</h1>
     <div class="ui vertical aligned stackable grid container">
         <div class="row">
@@ -126,6 +138,16 @@
 
 {% block script %}
 <script type="module">
+    $('.message .close')
+  .on('click', function() {
+    $(this)
+      .closest('.message')
+      .transition('fade')
+    ;
+  })
+;
+
+
     import Main from "{{ url_for('static', filename="main.js") }}"
     const data = {{ data|tojson }}
     let app = new Main()
